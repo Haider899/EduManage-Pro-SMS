@@ -1,0 +1,8 @@
+.env.local
+.env.production.local
+node_modules/
+.next/
+out/
+.DS_Store
+*.pem
+.yarn/install-state.gz
