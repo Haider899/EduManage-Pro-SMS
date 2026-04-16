@@ -207,7 +207,9 @@ const Dashboard = () => {
               ) : isTeacher ? (
                 <>
                   <Link href="/teachers/classes" className="btn-accent btn-pill">My Classes</Link>
-                  <Link href="/teachers/grades" className="btn-ghost btn-pill">Grades</Link>
+                  <Link href="/teachers/materials" className="btn-ghost btn-pill">Materials</Link>
+                  <Link href="/leaves/apply" className="btn-ghost btn-pill">Apply Leave</Link>
+                  <Link href="/assignments" className="btn-ghost btn-pill">Assignments</Link>
                 </>
               ) : isStudent ? (
                 <>
@@ -301,6 +303,8 @@ const Dashboard = () => {
               ? [
                   { label: 'Upload Grades', action: () => window.location.href = '/grades/submit' },
                   { label: 'Mark Attendance', action: () => window.location.href = '/attendance/mark' },
+                  { label: 'Upload Materials', action: () => window.location.href = '/teachers/materials' },
+                  { label: 'Create Assignment', action: () => window.location.href = '/assignments' },
                 ]
               : isStudent
               ? [

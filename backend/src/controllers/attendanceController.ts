@@ -51,6 +51,27 @@ export const markAttendance = async (req: Request, res: Response) => {
   }
 };
 
+export const markAttendanceBulk = async (req: Request, res: Response) => {
+  try {
+    const { date, entries } = req.body;
+    if (!Array.isArray(entries)) return res.status(400).json({ success: false, message: 'Entries array required' });
+
+    const docs = entries.map((e: any) => ({
+      student: e.student || null,
+      class: e.class || null,
+      date: date ? new Date(date) : new Date(),
+      status: e.present ? 'present' : 'absent',
+      remarks: e.remarks || '',
+      markedBy: req.user?._id,
+    }));
+
+    const created = await Attendance.insertMany(docs);
+    res.status(201).json({ success: true, data: created });
+  } catch (error) {
+    res.status(400).json({ success: false, message: 'Error marking attendance bulk', error });
+  }
+};
+
 export const getStudentAttendance = async (req: Request, res: Response) => {
   try {
     const { studentId } = req.params;

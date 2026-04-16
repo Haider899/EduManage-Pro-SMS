@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
@@ -6,19 +6,33 @@ import { FiPlus, FiSearch, FiEdit2, FiTrash2 } from 'react-icons/fi';
 import Link from 'next/link';
 import api from '@/lib/api';
 import toast from 'react-hot-toast';
+import { useAuth } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation';
 
 const TeacherList = () => {
   const [teachers, setTeachers] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     fetchTeachers();
   }, []);
 
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading) {
+      // Only admin, hr and superadmin can access the Teacher Directory
+      if (user && !['admin', 'hr', 'superadmin'].includes(user.role)) {
+        router.push('/');
+      }
+    }
+  }, [user, loading, router]);
+
   const fetchTeachers = async () => {
-    try {
-      setLoading(true);
+      try {
+      setIsLoading(true);
       const res: any = await api.get('/teachers');
       if (res && res.success) {
         setTeachers(res.data);
@@ -26,7 +40,7 @@ const TeacherList = () => {
     } catch (err: any) {
       toast.error(err.response?.data?.message || 'Failed to fetch teachers');
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -102,7 +116,7 @@ const TeacherList = () => {
               </tr>
             </thead>
             <tbody>
-              {loading ? (
+              {isLoading ? (
                 <tr>
                   <td colSpan={6} className="px-6 py-8 text-center text-slate-400">
                     Loading teachers...

@@ -49,12 +49,12 @@ export const register = asyncHandler(async (req: any, res: Response) => {
   }
 
   // 2) Logic for Admin-initiated onboarding
-  if (currentUser && currentUser.role === 'admin') {
+  if (currentUser && currentUser.role === 'Admin') {
     // Admin can create any role (including HR and Teacher)
   }
 
   // 3) Logic for HR-initiated onboarding
-  if (currentUser && currentUser.role === 'hr') {
+  if (currentUser && currentUser.role === 'HR') {
     if (role && role !== 'student') {
       throw new AppError('HR can only onboard students.', 403);
     }
@@ -80,7 +80,7 @@ export const onboardStaff = asyncHandler(async (req: any, res: Response) => {
   }
 
   // 2) Security: Only Admins can onboard Staff (HR and Teachers)
-  if (req.user.role !== 'admin') {
+  if (req.user.role !== 'Admin') {
     throw new AppError('Unauthorized: Only administrators can onboard staff identities', 403);
   }
 

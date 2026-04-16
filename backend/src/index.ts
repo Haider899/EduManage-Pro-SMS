@@ -12,6 +12,10 @@ import noticeRoutes from './routes/noticeRoutes';
 import meetingRoutes from './routes/meetingRoutes';
 import reportRoutes from './routes/reportRoutes';
 import feeRoutes from './routes/feeRoutes';
+import timetableRoutes from './routes/timetableRoutes';
+import assignmentRoutes from './routes/assignmentRoutes';
+import materialRoutes from './routes/materialRoutes';
+import leaveRoutes from './routes/leaveRoutes';
 
 // Validate environment variables
 validateEnv();
@@ -65,7 +69,7 @@ const seedAdmin = async () => {
         name: 'Haider',
         username: adminUsername,
         password: adminPassword,
-        role: 'admin'
+        role: 'Admin'
       });
       console.log(`✓ Initial Admin Created: Haider (Username: ${adminUsername})`);
     } else {
@@ -118,6 +122,7 @@ app.get('/api/health', (_req, res) => {
     message: 'Server is running',
     timestamp: new Date().toISOString(),
     environment: config.nodeEnv,
+    isMockMode: IS_MOCK_MODE,
   });
 });
 
@@ -131,6 +136,10 @@ app.use('/api/notices', noticeRoutes);
 app.use('/api/meetings', meetingRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/fees', feeRoutes);
+app.use('/api/timetable', timetableRoutes);
+app.use('/api/assignments', assignmentRoutes);
+app.use('/api/materials', materialRoutes);
+app.use('/api/leaves', leaveRoutes);
 
 
 // Error Handler Middleware

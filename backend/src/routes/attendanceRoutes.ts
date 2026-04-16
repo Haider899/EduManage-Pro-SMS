@@ -15,6 +15,7 @@ router.get('/', restrictTo('admin', 'hr', 'teacher'), getAttendance);
 
 // Only Admin and Teachers can mark attendance
 router.post('/', restrictTo('admin', 'teacher'), markAttendance);
+router.post('/bulk', restrictTo('admin', 'teacher'), markAttendanceBulk);
 
 router.get('/student/:studentId', restrictTo('admin', 'hr', 'teacher'), getStudentAttendance);
 

@@ -15,6 +15,23 @@ const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { login } = useAuth();
+  const [isMock, setIsMock] = useState(false);
+
+  React.useEffect(() => {
+    // check backend health to determine mock/offline mode
+    let mounted = true;
+    api
+      .get('/health')
+      .then((res: any) => {
+        if (!mounted) return;
+        setIsMock(!!res.isMockMode);
+      })
+      .catch(() => {
+        if (!mounted) return;
+        setIsMock(true);
+      });
+    return () => { mounted = false; };
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,11 +72,13 @@ const LoginPage = () => {
           </div>
           <h1 className="text-5xl font-black tracking-tight text-white mb-4 font-outfit">Identity</h1>
           <p className="text-slate-400 font-inter text-lg">Secure Access to EduManage SMS</p>
-          <div className="mt-4 px-4 py-2 bg-amber-500/10 border border-amber-500/20 rounded-xl">
-             <p className="text-[10px] text-amber-400 font-bold uppercase tracking-wider">
-               Offline Mode Active: Use LAZY-404 / SuperAdmin899
-             </p>
-          </div>
+          {isMock && (
+            <div className="mt-4 px-4 py-2 bg-amber-500/10 border border-amber-500/20 rounded-xl">
+               <p className="text-[10px] text-amber-400 font-bold uppercase tracking-wider">
+                 Offline Mode Active: Use LAZY-404 / SuperAdmin899
+               </p>
+            </div>
+          )}
         </div>
 
         <form onSubmit={handleLogin} className="space-y-8">
