@@ -54,7 +54,15 @@ export const protect = asyncHandler(async (req: AuthRequest, _res: Response, nex
 
 export const restrictTo = (...roles: UserRole[]) => {
   return (req: AuthRequest, _res: Response, next: NextFunction) => {
-    if (!req.user || !roles.includes(req.user.role)) {
+    if (!req.user) {
+      throw new AppError('You do not have permission to perform this action', 403);
+    }
+
+    if (req.user.role === UserRole.SUPERADMIN) {
+      return next();
+    }
+
+    if (!roles.includes(req.user.role)) {
       throw new AppError('You do not have permission to perform this action', 403);
     }
     next();

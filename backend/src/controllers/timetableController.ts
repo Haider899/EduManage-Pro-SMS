@@ -46,19 +46,19 @@ export const deleteSlot = async (req: Request, res: Response) => {
 
 export const bulkUpdate = async (req: Request, res: Response) => {
   try {
-    // Expect an array of slots to replace for a class/academicYear
     const { slots, classId, academicYear } = req.body;
-    if (!Array.isArray(slots)) return res.status(400).json({ success: false, message: 'Slots array required' });
+    if (!Array.isArray(slots)) {
+      return res.status(400).json({ success: false, message: 'Slots array required' });
+    }
 
-    // For simplicity remove existing for class+year then insert new
     const filter: any = {};
     if (classId) filter.class = classId;
     if (academicYear) filter.academicYear = academicYear;
 
     await Timetable.deleteMany(filter);
     const created = await Timetable.insertMany(slots.map((s: any) => ({ ...s, class: classId, academicYear })));
-    res.json({ success: true, data: created });
+    return res.json({ success: true, data: created });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Error bulk updating timetable', error });
+    return res.status(500).json({ success: false, message: 'Error bulk updating timetable', error });
   }
 };

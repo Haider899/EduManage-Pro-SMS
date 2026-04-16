@@ -1,13 +1,14 @@
 import { Router } from 'express';
 import { createAssignment, getAssignments, deleteAssignment } from '../controllers/assignmentController';
 import { protect, restrictTo } from '../middleware/authMiddleware';
+import { UserRole } from '../models/User';
 
 const router = Router();
 
 router.use(protect);
 
-router.get('/', restrictTo('admin', 'hr', 'teacher', 'superadmin'), getAssignments);
-router.post('/', restrictTo('teacher', 'hr', 'superadmin'), createAssignment);
-router.delete('/:id', restrictTo('admin', 'hr', 'superadmin'), deleteAssignment);
+router.get('/', restrictTo(UserRole.SUPERADMIN, UserRole.ADMIN, UserRole.HR, UserRole.TEACHER), getAssignments);
+router.post('/', restrictTo(UserRole.SUPERADMIN, UserRole.HR, UserRole.TEACHER), createAssignment);
+router.delete('/:id', restrictTo(UserRole.SUPERADMIN, UserRole.ADMIN, UserRole.HR), deleteAssignment);
 
 export default router;

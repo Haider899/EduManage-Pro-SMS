@@ -3,13 +3,14 @@
 import { useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { AUTH_PAGES, canAccessPath } from '@/lib/rbac';
 
 export default function AuthGuard({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
 
-  const isAuthPage = pathname === '/login' || pathname === '/register';
+  const isAuthPage = AUTH_PAGES.includes(pathname) || pathname.startsWith('/reset-password/');
 
   useEffect(() => {
     if (!loading) {
@@ -17,9 +18,11 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
         router.push('/login');
       } else if (user && isAuthPage) {
         router.push('/');
+      } else if (user && !canAccessPath(user.role, pathname)) {
+        router.push('/');
       }
     }
-  }, [user, loading, pathname, router]);
+  }, [user, loading, pathname, router, isAuthPage]);
 
   if (loading) {
     return (

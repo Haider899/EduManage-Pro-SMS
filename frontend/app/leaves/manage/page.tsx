@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FiCalendar, FiCheckCircle, FiXCircle, FiArrowLeft, FiFilter, FiUser } from 'react-icons/fi';
+import { FiCalendar, FiCheckCircle, FiXCircle, FiArrowLeft, FiUser } from 'react-icons/fi';
 import Link from 'next/link';
 import { toast } from 'react-hot-toast';
 

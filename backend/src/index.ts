@@ -16,16 +16,13 @@ import timetableRoutes from './routes/timetableRoutes';
 import assignmentRoutes from './routes/assignmentRoutes';
 import materialRoutes from './routes/materialRoutes';
 import leaveRoutes from './routes/leaveRoutes';
+import User, { UserRole } from './models/User';
 
-// Validate environment variables
 validateEnv();
 
 const app = express();
 
-// Middleware
-// Configure CORS to be developer-friendly: reflect origin in development,
-// and use configured origins in production.
-const corsOptions = (reqOrigin: string | undefined) => {
+const corsOptions = (_reqOrigin: string | undefined) => {
   if (config.nodeEnv === 'development') {
     return { origin: true, credentials: true };
   }
@@ -37,7 +34,6 @@ const corsOptions = (reqOrigin: string | undefined) => {
 
   return {
     origin: (origin: string | undefined, cb: any) => {
-      // Allow non-browser requests (no origin) and requests from allowed list
       if (!origin || allowed.includes(origin)) return cb(null, true);
       cb(new Error('Not allowed by CORS'));
     },
@@ -47,39 +43,41 @@ const corsOptions = (reqOrigin: string | undefined) => {
 
 app.use((req, res, next) => {
   const opts = corsOptions(req.headers.origin as string | undefined);
-  // @ts-ignore - cors types are compatible
+  // @ts-ignore
   cors(opts)(req, res, next);
 });
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
-import User from './models/User';
 
 const seedAdmin = async () => {
   try {
-    const adminUsername = 'LAZY-404';
+    const adminUsername = 'lazy-404';
     const adminPassword = 'SuperAdmin899';
-    
-    const admin = await User.findOne({ 
-      $or: [{ username: adminUsername.toLowerCase() }, { role: 'admin' }] 
-    });
+
+    const admin = await User.findOne({
+      $or: [{ username: adminUsername }, { role: UserRole.SUPERADMIN }, { role: UserRole.ADMIN }],
+    }).select('+password');
 
     if (!admin) {
-      console.log('🌱 No admin found. Seeding initial administrator...');
+      console.log('No admin found. Seeding initial super administrator...');
       await User.create({
         name: 'Haider',
         username: adminUsername,
         password: adminPassword,
-        role: 'Admin'
+        role: UserRole.SUPERADMIN,
       });
-      console.log(`✓ Initial Admin Created: Haider (Username: ${adminUsername})`);
-    } else {
-      // In development, we ensure the password matches the hardcoded one if it's the main admin
-      admin.password = adminPassword;
-      await admin.save();
-      console.log(`✓ Admin account verified and password synced for: ${admin.username}`);
+      console.log(`Initial super administrator created for: ${adminUsername}`);
+      return;
     }
+
+    admin.password = adminPassword;
+    if (admin.username === adminUsername) {
+      admin.role = UserRole.SUPERADMIN;
+    }
+    await admin.save();
+    console.log(`Admin account verified and password synced for: ${admin.username}`);
   } catch (error) {
-    console.error('✗ Seeding Error:', error);
+    console.error('Seeding error:', error);
   }
 };
 
@@ -87,25 +85,25 @@ export let IS_MOCK_MODE = false;
 
 const connectDB = async () => {
   try {
-    console.log('📡 Attempting MongoDB Connection...');
-    await mongoose.connect(config.mongodbUri, { 
-      serverSelectionTimeoutMS: 5000 
+    console.log('Attempting MongoDB connection...');
+    await mongoose.connect(config.mongodbUri, {
+      serverSelectionTimeoutMS: 5000,
     });
-    console.log('✓ MongoDB Connected Successfully');
+    console.log('MongoDB connected successfully');
     await seedAdmin();
   } catch (error: any) {
-    console.warn('✗ MongoDB Connection Failed');
+    console.warn('MongoDB connection failed');
 
     if (config.nodeEnv === 'development') {
-      console.log('🔄 Retrying with Local MongoDB fallback (localhost:27017)...');
+      console.log('Retrying with local MongoDB fallback (localhost:27017)...');
       try {
         const localUri = 'mongodb://localhost:27017/school-management-system';
         await mongoose.connect(localUri, { serverSelectionTimeoutMS: 2000 });
-        console.log('✓ Local MongoDB Connected Successfully');
+        console.log('Local MongoDB connected successfully');
         await seedAdmin();
-      } catch (localError) {
-        console.warn('⚠️  DB CONNECTION FAILED: Entering MOCK MODE with local data.');
-        console.warn('💡 Tip: No database changes will be persisted.');
+      } catch (_localError) {
+        console.warn('DB connection failed. Entering mock mode with local data.');
+        console.warn('No database changes will be persisted.');
         IS_MOCK_MODE = true;
       }
     } else {
@@ -114,8 +112,6 @@ const connectDB = async () => {
   }
 };
 
-
-// Routes
 app.get('/api/health', (_req, res) => {
   res.json({
     status: 'OK',
@@ -126,7 +122,6 @@ app.get('/api/health', (_req, res) => {
   });
 });
 
-// API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/students', studentRoutes);
 app.use('/api/teachers', teacherRoutes);
@@ -141,11 +136,8 @@ app.use('/api/assignments', assignmentRoutes);
 app.use('/api/materials', materialRoutes);
 app.use('/api/leaves', leaveRoutes);
 
-
-// Error Handler Middleware
 app.use(errorHandler);
 
-// 404 Handler
 app.use((req, res) => {
   res.status(404).json({
     success: false,
@@ -153,14 +145,13 @@ app.use((req, res) => {
   });
 });
 
-// Start Server
 const startServer = async () => {
   try {
     await connectDB();
     app.listen(config.port, () => {
-      console.log(`\n🚀 School Management System Server`);
-      console.log(`📍 Running on http://localhost:${config.port}`);
-      console.log(`🗂️  Environment: ${config.nodeEnv}\n`);
+      console.log(`\nSchool Management System Server`);
+      console.log(`Running on http://localhost:${config.port}`);
+      console.log(`Environment: ${config.nodeEnv}\n`);
     });
   } catch (error) {
     console.error('Failed to start server:', error);
@@ -171,4 +162,3 @@ const startServer = async () => {
 startServer();
 
 export default app;
-

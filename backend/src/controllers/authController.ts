@@ -4,7 +4,7 @@ import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import User from '../models/User';
+import User, { UserRole } from '../models/User';
 import Teacher from '../models/Teacher';
 import HR from '../models/HR';
 import { asyncHandler } from '../utils/asyncHandler';
@@ -17,15 +17,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const signToken = (id: string) => {
-  return jwt.sign({ id }, config.jwtSecret, {
-    expiresIn: config.jwtExpire,
+  return jwt.sign({ id }, config.jwtSecret as jwt.Secret, {
+    expiresIn: config.jwtExpire as jwt.SignOptions['expiresIn'],
   });
 };
 
 const createSendToken = (user: any, statusCode: number, res: Response) => {
   const token = signToken(user._id);
-
-  // Remove password from output
   user.password = undefined;
 
   res.status(statusCode).json({
@@ -41,23 +39,25 @@ export const register = asyncHandler(async (req: any, res: Response) => {
   const { role } = req.body;
   const currentUser = req.user;
 
-  // 1) Logic for public (unauthenticated) registration
   if (!currentUser) {
-    if (role && role !== 'student') {
+    if (role && role !== UserRole.STUDENT) {
       throw new AppError('Public registration is restricted to students only.', 403);
     }
   }
 
-  // 2) Logic for Admin-initiated onboarding
-  if (currentUser && currentUser.role === 'Admin') {
-    // Admin can create any role (including HR and Teacher)
-  }
-
-  // 3) Logic for HR-initiated onboarding
-  if (currentUser && currentUser.role === 'HR') {
-    if (role && role !== 'student') {
+  if (currentUser && currentUser.role === UserRole.HR) {
+    if (role && role !== UserRole.STUDENT) {
       throw new AppError('HR can only onboard students.', 403);
     }
+  }
+
+  if (
+    currentUser &&
+    ![UserRole.SUPERADMIN, UserRole.ADMIN, UserRole.HR].includes(currentUser.role) &&
+    role &&
+    role !== UserRole.STUDENT
+  ) {
+    throw new AppError('You do not have permission to register privileged accounts.', 403);
   }
 
   const newUser = await User.create({
@@ -65,7 +65,7 @@ export const register = asyncHandler(async (req: any, res: Response) => {
     email: req.body.email,
     username: req.body.username,
     password: req.body.password,
-    role: role || 'student',
+    role: role || UserRole.STUDENT,
   });
 
   createSendToken(newUser, 201, res);
@@ -74,28 +74,20 @@ export const register = asyncHandler(async (req: any, res: Response) => {
 export const onboardStaff = asyncHandler(async (req: any, res: Response) => {
   const { name, username, email, password, role, phone, address, city, state, pinCode, joiningDate, employeeId } = req.body;
 
-  // 1) Validation
   if (!name || !username || !password || !role) {
     throw new AppError('Missing required fields for staff onboarding', 400);
   }
 
-  // 2) Security: Only Admins can onboard Staff (HR and Teachers)
-  if (req.user.role !== 'Admin') {
-    throw new AppError('Unauthorized: Only administrators can onboard staff identities', 403);
+  if (![UserRole.SUPERADMIN, UserRole.ADMIN].includes(req.user.role)) {
+    throw new AppError('Unauthorized: Only super administrators and administrators can onboard staff identities', 403);
   }
 
-  // 3) Pre-check: Does a User with this username or email already exist?
   const existingUser = await User.findOne({
-    $or: [
-      { username: username.toLowerCase() },
-      ...(email ? [{ email: email.toLowerCase() }] : [])
-    ]
+    $or: [{ username: username.toLowerCase() }, ...(email ? [{ email: email.toLowerCase() }] : [])],
   });
 
   if (existingUser) {
-    // Check if this is an orphan (User exists but no linked profile)
     if (!existingUser.refId) {
-      // Clean up orphaned user from a previous failed attempt
       console.log(`[ONBOARD] Cleaning up orphaned user record for: ${existingUser.username}`);
       await User.findByIdAndDelete(existingUser._id);
     } else {
@@ -106,29 +98,26 @@ export const onboardStaff = asyncHandler(async (req: any, res: Response) => {
     }
   }
 
-  // 4) Split name for profile records
   const nameParts = name.trim().split(' ');
   const firstName = nameParts[0];
   const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : 'Staff';
 
-  // 5) Create Primary User Record
   let newUser;
   try {
     newUser = await User.create({
       name,
       username,
-      email: email || undefined, // Don't save empty string, let sparse index work
+      email: email || undefined,
       password,
       role,
     });
   } catch (err: any) {
     if (err.code === 11000) {
-      throw new AppError(`Username or email already exists. Please use different credentials.`, 400);
+      throw new AppError('Username or email already exists. Please use different credentials.', 400);
     }
     throw err;
   }
 
-  // 6) Create Secondary Profile Record (Full Profile) — with ROLLBACK on failure
   let profile;
   const commonData = {
     employeeId: employeeId || `STAFF-${Date.now().toString().slice(-6)}`,
@@ -144,9 +133,9 @@ export const onboardStaff = asyncHandler(async (req: any, res: Response) => {
   };
 
   try {
-    if (role === 'hr') {
+    if (role === UserRole.HR) {
       profile = await HR.create(commonData);
-    } else if (role === 'teacher') {
+    } else if (role === UserRole.TEACHER) {
       profile = await Teacher.create({
         ...commonData,
         dateOfBirth: req.body.dateOfBirth || new Date('1990-01-01'),
@@ -155,20 +144,17 @@ export const onboardStaff = asyncHandler(async (req: any, res: Response) => {
         experience: req.body.experience || 0,
         salary: req.body.salary || 0,
       });
+    } else {
+      throw new AppError('Only HR and teacher identities can be onboarded here.', 400);
     }
   } catch (profileError: any) {
-    // ROLLBACK: Delete the User record if profile creation fails
     console.error(`[ONBOARD] Profile creation failed for ${username}. Rolling back User record.`, profileError.message);
     await User.findByIdAndDelete(newUser._id);
-    throw new AppError(
-      `Failed to create ${role} profile: ${profileError.message}. The operation has been rolled back.`,
-      400
-    );
+    throw new AppError(`Failed to create ${role} profile: ${profileError.message}. The operation has been rolled back.`, 400);
   }
 
-  // 7) Link User to Profile
   if (profile) {
-    newUser.refId = profile._id;
+    newUser.refId = String(profile._id) as any;
     await newUser.save({ validateBeforeSave: false });
   }
 
@@ -181,11 +167,11 @@ export const onboardStaff = asyncHandler(async (req: any, res: Response) => {
         username: newUser.username,
         role: newUser.role,
         email: newUser.email,
-        refId: newUser.refId
+        refId: newUser.refId,
       },
-      profile
+      profile,
     },
-    message: `Successfully onboarded ${role.toUpperCase()} identity: ${name} with full professional profile.`
+    message: `Successfully onboarded ${String(role).toUpperCase()} identity: ${name} with full professional profile.`,
   });
 });
 
@@ -198,29 +184,28 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
     console.log('[AUTH] System is in MOCK MODE. Using local JSON data.');
     const mockData = JSON.parse(fs.readFileSync(path.join(__dirname, '../data/mockDB.json'), 'utf8'));
     const user = mockData.users.find(
-      (u: any) => 
-        (u.email === identifier.toLowerCase() || u.username === identifier.toLowerCase()) && 
+      (u: any) =>
+        (u.email === identifier.toLowerCase() || u.username === identifier.toLowerCase()) &&
         u.password === password
     );
 
     if (user) {
       console.log(`[AUTH] Mock login successful for: ${user.username}`);
-      return createSendToken({ ...user, _id: 'mock-id-' + user.username }, 200, res);
-    } else {
-      console.warn(`[AUTH] Mock login failed for ${identifier}`);
-      throw new AppError('Incorrect credentials (Mock Mode)', 401);
+      createSendToken({ ...user, _id: 'mock-id-' + user.username }, 200, res);
+      return;
     }
+
+    console.warn(`[AUTH] Mock login failed for ${identifier}`);
+    throw new AppError('Incorrect credentials (Mock Mode)', 401);
   }
 
-  // 1) Check if identifier and password exist
   if (!identifier || !password) {
     throw new AppError('Please provide identifier (email/username) and password', 400);
   }
 
-  // 2) Check if user exists && password is correct
   const searchIdentifier = identifier.toLowerCase();
   const user = await User.findOne({
-    $or: [{ email: searchIdentifier }, { username: searchIdentifier }]
+    $or: [{ email: searchIdentifier }, { username: searchIdentifier }],
   }).select('+password');
 
   if (!user) {
@@ -235,11 +220,8 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
   }
 
   console.log(`[AUTH] Login successful for: ${user.username} (${user.role})`);
-
-  // 3) If everything ok, send token to client
   createSendToken(user, 200, res);
 });
-
 
 export const getMe = asyncHandler(async (req: any, res: Response) => {
   res.json({
@@ -253,15 +235,12 @@ export const getMe = asyncHandler(async (req: any, res: Response) => {
 export const forgotPassword = asyncHandler(async (req: Request, res: Response) => {
   const { identifier } = req.body;
 
-  // 1) Get user based on POSTed email or username
   const searchIdentifier = identifier ? identifier.toLowerCase() : '';
   const user = await User.findOne({
-    $or: [{ email: searchIdentifier }, { username: searchIdentifier }]
+    $or: [{ email: searchIdentifier }, { username: searchIdentifier }],
   });
 
   if (!user) {
-    // We send success even if user not found to prevent user enumeration, 
-    // but in SMS context we can be more specific or log it.
     console.warn(`[AUTH] Forgot password requested for unknown identifier: ${searchIdentifier}`);
     return res.status(200).json({
       success: true,
@@ -269,11 +248,9 @@ export const forgotPassword = asyncHandler(async (req: Request, res: Response) =
     });
   }
 
-  // 2) Generate the random reset token
   const resetToken = user.createPasswordResetToken();
   await user.save({ validateBeforeSave: false });
 
-  // 3) Build a reliable reset URL. Prefer the request Origin, then configured FRONTEND_URL, then the first CORS origin.
   const originHeader = req.get('origin');
   const firstCors = (config.corsOrigin || '').split(',')[0].trim();
   const baseUrl = originHeader || config.frontendUrl || firstCors;
@@ -282,16 +259,15 @@ export const forgotPassword = asyncHandler(async (req: Request, res: Response) =
 
   try {
     await sendEmail({
-      email: user.email || 'admin@school.com', // Fallback for seeding
+      email: user.email || 'admin@school.com',
       subject: 'Your password reset token (valid for 10 min)',
       message,
     });
 
-    // In development, include the reset URL in the response to make testing easier.
     const responsePayload: any = { success: true, message: 'Token sent to email!' };
     if (config.nodeEnv !== 'production') responsePayload.resetURL = resetURL;
 
-    res.status(200).json(responsePayload);
+    return res.status(200).json(responsePayload);
   } catch (err) {
     user.passwordResetToken = undefined;
     user.passwordResetExpires = undefined;
@@ -302,18 +278,13 @@ export const forgotPassword = asyncHandler(async (req: Request, res: Response) =
 });
 
 export const resetPassword = asyncHandler(async (req: Request, res: Response) => {
-  // 1) Get user based on the token
-  const hashedToken = crypto
-    .createHash('sha256')
-    .update(req.params.token)
-    .digest('hex');
+  const hashedToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
 
   const user = await User.findOne({
     passwordResetToken: hashedToken,
     passwordResetExpires: { $gt: new Date() },
   });
 
-  // 2) If token has not expired, and there is user, set the new password
   if (!user) {
     throw new AppError('Token is invalid or has expired', 400);
   }
@@ -323,7 +294,6 @@ export const resetPassword = asyncHandler(async (req: Request, res: Response) =>
   user.passwordResetExpires = undefined;
   await user.save();
 
-  // 3) Log the user in, send JWT
   createSendToken(user, 200, res);
 });
 
@@ -334,28 +304,23 @@ export const updateMe = asyncHandler(async (req: any, res: Response) => {
     const mockPath = path.join(__dirname, '../data/mockDB.json');
     const mockData = JSON.parse(fs.readFileSync(mockPath, 'utf8'));
     const userIdx = mockData.users.findIndex((u: any) => u.username === req.user.username);
-    
+
     if (userIdx !== -1) {
       if (name) mockData.users[userIdx].name = name;
       if (email) mockData.users[userIdx].email = email;
       fs.writeFileSync(mockPath, JSON.stringify(mockData, null, 2));
       return res.status(200).json({
         success: true,
-        data: { user: mockData.users[userIdx] }
+        data: { user: mockData.users[userIdx] },
       });
     }
   }
 
-  // 1) Update user document
-  const updatedUser = await User.findByIdAndUpdate(
-    req.user.id,
-    { name, email },
-    { new: true, runValidators: true }
-  );
+  const updatedUser = await User.findByIdAndUpdate(req.user.id, { name, email }, { new: true, runValidators: true });
 
-  res.status(200).json({
+  return res.status(200).json({
     success: true,
-    data: { user: updatedUser }
+    data: { user: updatedUser },
   });
 });
 
@@ -372,31 +337,30 @@ export const updatePassword = asyncHandler(async (req: any, res: Response) => {
     const userIdx = mockData.users.findIndex((u: any) => u.username === req.user.username);
 
     if (userIdx !== -1) {
-      // Check current password
       if (mockData.users[userIdx].password !== passwordCurrent) {
         throw new AppError('Your current password is wrong', 401);
       }
-      // Update password
+
       mockData.users[userIdx].password = password;
       fs.writeFileSync(mockPath, JSON.stringify(mockData, null, 2));
-      
+
       const user = mockData.users[userIdx];
-      return createSendToken({ ...user, _id: 'mock-id-' + user.username }, 200, res);
+      createSendToken({ ...user, _id: 'mock-id-' + user.username }, 200, res);
+      return;
     }
   }
 
-  // 1) Get user from collection
   const user = await User.findById(req.user.id).select('+password');
+  if (!user) {
+    throw new AppError('User not found', 404);
+  }
 
-  // 2) Check if POSTed current password is correct
   if (!(await user.comparePassword(passwordCurrent))) {
     throw new AppError('Your current password is wrong', 401);
   }
 
-  // 3) If so, update password
   user.password = password;
   await user.save();
 
-  // 4) Log user in, send JWT
   createSendToken(user, 200, res);
 });

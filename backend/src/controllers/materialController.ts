@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import Material from '../models/Material';
+import { AuthRequest } from '../middleware/authMiddleware';
 
-export const uploadMaterial = async (req: Request, res: Response) => {
+export const uploadMaterial = async (req: AuthRequest, res: Response) => {
   try {
     const payload = { ...req.body, uploadedBy: req.user?._id };
     const m = new Material(payload);
@@ -12,7 +13,7 @@ export const uploadMaterial = async (req: Request, res: Response) => {
   }
 };
 
-export const getMaterials = async (req: Request, res: Response) => {
+export const getMaterials = async (_req: Request, res: Response) => {
   try {
     const materials = await Material.find().populate('uploadedBy').sort({ createdAt: -1 });
     res.json({ success: true, data: materials });

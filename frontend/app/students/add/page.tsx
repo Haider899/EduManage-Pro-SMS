@@ -1,12 +1,12 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import { 
   FiUserPlus, FiMail, FiLock, FiUser, FiArrowLeft, 
-  FiHash, FiPhone, FiCalendar, FiMapPin, FiBriefcase, FiLayers, FiTag
+  FiHash, FiPhone, FiCalendar, FiMapPin, FiLayers, FiTag
 } from 'react-icons/fi';
 import api from '@/lib/api';
 import Link from 'next/link';
@@ -30,22 +30,10 @@ const AddStudentPage = () => {
     parentEmail: '',
   });
 
-  const [classes, setClasses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  // Fetch classes for dropdown (if they exist)
   useEffect(() => {
-    const fetchClasses = async () => {
-      try {
-        const res: any = await api.get('/classes');
-        setClasses(res.data || []);
-      } catch (err) {
-        console.warn('Could not fetch classes, might be empty');
-      }
-    };
-    // For now, if no classes endpoint exists yet, we'll use empty or mock
-    // fetchClasses(); 
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {

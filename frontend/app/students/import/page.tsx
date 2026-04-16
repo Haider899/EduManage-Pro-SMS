@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import { FiUploadCloud, FiFileText, FiCheckCircle, FiAlertCircle, FiArrowLeft, FiDownload } from 'react-icons/fi';

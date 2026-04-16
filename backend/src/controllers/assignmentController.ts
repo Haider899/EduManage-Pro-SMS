@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import Assignment from '../models/Assignment';
+import { AuthRequest } from '../middleware/authMiddleware';
 
-export const createAssignment = async (req: Request, res: Response) => {
+export const createAssignment = async (req: AuthRequest, res: Response) => {
   try {
     const payload = { ...req.body, createdBy: req.user?._id };
     const a = new Assignment(payload);
@@ -12,7 +13,7 @@ export const createAssignment = async (req: Request, res: Response) => {
   }
 };
 
-export const getAssignments = async (req: Request, res: Response) => {
+export const getAssignments = async (_req: Request, res: Response) => {
   try {
     const assignments = await Assignment.find().populate('createdBy').sort({ createdAt: -1 });
     res.json({ success: true, data: assignments });

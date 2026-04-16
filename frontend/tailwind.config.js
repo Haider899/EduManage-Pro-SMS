@@ -1,5 +1,22 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  safelist: [
+    'from-cyan-400',
+    'via-sky-500',
+    'to-blue-600',
+    'from-orange-400',
+    'via-amber-500',
+    'to-rose-500',
+    'from-emerald-400',
+    'via-teal-500',
+    'to-cyan-600',
+    'from-fuchsia-400',
+    'via-violet-500',
+    'to-indigo-600',
+    'from-pink-400',
+    'via-rose-500',
+    'to-orange-500',
+  ],
   content: [
     './app/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',

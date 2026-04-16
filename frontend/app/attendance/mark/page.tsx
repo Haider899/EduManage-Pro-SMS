@@ -51,7 +51,7 @@ const MarkAttendance = () => {
 
       <div className="glass-effect p-4 rounded-xl">
         <div className="flex items-center gap-4">
-          <DatePicker selected={date} onChange={(d) => setDate(d)} />
+          <DatePicker selected={date} onChange={(d: Date | null) => setDate(d)} />
           <button className="btn-ghost btn-pill" onClick={() => setDate(new Date())}>Today</button>
           <label className="flex items-center gap-2">
             <input type="checkbox" checked={editPast} onChange={() => setEditPast(p => !p)} />

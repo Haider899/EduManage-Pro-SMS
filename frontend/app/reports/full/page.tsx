@@ -34,8 +34,6 @@ const FullReportPage = () => {
     </div>
   );
 
-  const COLORS = ['#6366f1', '#10b981', '#f59e0b', '#ef4444'];
-  
   const stats = [
     { label: 'Total Students', value: data?.overview.totalStudents, icon: FiUsers, color: 'text-indigo-400', bg: 'bg-indigo-500/10' },
     { label: 'Staff Strength', value: data?.overview.totalTeachers, icon: FiActivity, color: 'text-emerald-400', bg: 'bg-emerald-500/10' },

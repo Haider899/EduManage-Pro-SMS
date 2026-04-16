@@ -2,13 +2,14 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import api from '@/lib/api';
-
-type Role = 'superadmin' | 'admin' | 'hr' | 'teacher' | 'student';
+import type { Role } from '@/lib/rbac';
 
 interface User {
   id: string;
+  _id?: string;
   name: string;
   email: string;
+  username?: string;
   role: Role;
 }
 

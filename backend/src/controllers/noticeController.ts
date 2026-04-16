@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import Notice from '../models/Notice';
 import { asyncHandler } from '../utils/asyncHandler';
 import { AppError } from '../middleware/errorMiddleware';
+import { UserRole } from '../models/User';
 
 export const createNotice = asyncHandler(async (req: any, res: Response) => {
   const { title, content, category, targetRoles, expiresAt } = req.body;
@@ -23,9 +24,8 @@ export const createNotice = asyncHandler(async (req: any, res: Response) => {
 });
 
 export const getNotices = asyncHandler(async (req: any, res: Response) => {
-  // Filters notices based on target role or shows all if admin
   const query: any = {};
-  if (req.user.role !== 'admin') {
+  if (![UserRole.SUPERADMIN, UserRole.ADMIN].includes(req.user.role)) {
     query.targetRoles = { $in: ['all', req.user.role] };
   }
 

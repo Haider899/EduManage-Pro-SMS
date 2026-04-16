@@ -9,6 +9,7 @@ import {
 } from '../controllers/teacherController';
 import { protect, restrictTo } from '../middleware/authMiddleware';
 import { validate } from '../middleware/validate';
+import { UserRole } from '../models/User';
 
 const router = Router();
 
@@ -19,7 +20,7 @@ router.get('/:id', getTeacherById);
 
 // Admin and HR can create teachers
 router.post('/', 
-  restrictTo('admin', 'hr'),
+  restrictTo(UserRole.SUPERADMIN, UserRole.ADMIN, UserRole.HR),
   [
     body('name').notEmpty().withMessage('Name is required'),
     body('email').isEmail().withMessage('Valid email is required'),
@@ -39,10 +40,10 @@ router.post('/',
 );
 
 // Admin and HR can update teachers
-router.put('/:id', restrictTo('admin', 'hr'), updateTeacher);
-router.patch('/:id', restrictTo('admin', 'hr'), updateTeacher);
+router.put('/:id', restrictTo(UserRole.SUPERADMIN, UserRole.ADMIN, UserRole.HR), updateTeacher);
+router.patch('/:id', restrictTo(UserRole.SUPERADMIN, UserRole.ADMIN, UserRole.HR), updateTeacher);
 
 // Only Admin can delete teachers
-router.delete('/:id', restrictTo('admin'), deleteTeacher);
+router.delete('/:id', restrictTo(UserRole.SUPERADMIN, UserRole.ADMIN), deleteTeacher);
 
 export default router;

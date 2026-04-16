@@ -35,13 +35,17 @@ const AssignmentsPage = () => {
     try {
       const res: any = await api.get('/assignments');
       setAssignments(res.data || []);
+      return res.data || [];
     } catch (err: any) {
-      // ignore
+      return [];
     }
   };
 
   const create = async () => {
-    if (!title || !dueDate) return toast.error('Please provide title and due date');
+    if (!title || !dueDate) {
+      toast.error('Please provide title and due date');
+      return;
+    }
     try {
       const payload = {
         title,

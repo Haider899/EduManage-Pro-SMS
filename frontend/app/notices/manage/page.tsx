@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FiBell, FiPlus, FiArrowLeft, FiTrash2, FiClock } from 'react-icons/fi';
+import { FiPlus, FiArrowLeft, FiTrash2, FiClock } from 'react-icons/fi';
 import Link from 'next/link';
 import { toast } from 'react-hot-toast';
 

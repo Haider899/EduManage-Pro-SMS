@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FiUser, FiMail, FiShield, FiTag, FiClock, FiActivity } from 'react-icons/fi';
+import { FiUser, FiMail, FiShield, FiTag, FiActivity } from 'react-icons/fi';
 import { useAuth } from '@/context/AuthContext';
 
 const ProfilePage = () => {
@@ -10,7 +10,7 @@ const ProfilePage = () => {
 
   const details = [
     { label: 'Full Name', value: user?.name, icon: FiUser, color: 'text-indigo-400' },
-    { label: 'Username', value: user?.username, icon: FiTag, color: 'text-sky-400' },
+    { label: 'Username', value: user?.username || user?.email?.split('@')[0], icon: FiTag, color: 'text-sky-400' },
     { label: 'Email Address', value: user?.email || 'N/A', icon: FiMail, color: 'text-purple-400' },
     { label: 'Assigned Role', value: user?.role, icon: FiShield, color: 'text-emerald-400', highlight: true },
   ];

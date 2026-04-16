@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 const TeacherLeaves = () => {
   const { user } = useAuth();
-  const [leaves, setLeaves] = useState<any[]>([]);
+  const [leaves] = useState<any[]>([]);
 
   if (!user) return null;
 

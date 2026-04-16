@@ -6,6 +6,8 @@
   :root {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
+    --panel: rgba(10, 16, 31, 0.74);
+    --panel-border: rgba(255, 255, 255, 0.1);
   }
 
   * {
@@ -17,7 +19,11 @@
 
   body {
     @apply bg-slate-950 text-slate-100 font-inter antialiased;
-    background: radial-gradient(circle at 50% 10%, #1e1b4b 0%, #020617 100%);
+    background:
+      radial-gradient(circle at top, rgba(14, 165, 233, 0.22), transparent 24%),
+      radial-gradient(circle at 20% 20%, rgba(249, 115, 22, 0.18), transparent 20%),
+      radial-gradient(circle at 80% 30%, rgba(217, 70, 239, 0.14), transparent 22%),
+      linear-gradient(180deg, #040712 0%, #07111f 42%, #030712 100%);
     min-height: 100vh;
   }
 }
@@ -27,8 +33,19 @@
     @apply bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl;
   }
 
+  .glass-panel {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    box-shadow:
+      0 22px 70px rgba(2, 6, 23, 0.55),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(26px);
+  }
+
   .btn-accent {
-    @apply bg-gradient-to-br from-indigo-600 to-violet-600 text-white font-bold transition-all duration-300 shadow-2xl active:scale-95;
+    @apply text-white font-bold transition-all duration-300 shadow-2xl active:scale-95;
+    background-image: linear-gradient(135deg, #22d3ee 0%, #3b82f6 45%, #fb923c 100%);
+    box-shadow: 0 22px 45px rgba(14, 165, 233, 0.25);
   }
 
   .tab-pill {
@@ -40,11 +57,19 @@
   }
 
   .btn-ghost {
-    @apply bg-slate-900/50 border border-white/10 text-slate-200 font-semibold transition-all duration-200 shadow-inner;
+    @apply bg-white/5 border border-white/10 text-slate-200 font-semibold transition-all duration-200 shadow-inner hover:bg-white/10;
   }
 
   .btn-pill {
     @apply rounded-full px-6 py-3 inline-flex items-center gap-3;
+  }
+
+  .badge-pill {
+    @apply inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[11px] font-black uppercase tracking-[0.24em] text-slate-300;
+  }
+
+  .surface-highlight {
+    @apply rounded-[2rem] border border-white/10 bg-white/[0.04] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)];
   }
 
   .pulse-track {
@@ -69,11 +94,16 @@
 
 @layer utilities {
   .gradient-text {
-    @apply bg-gradient-to-br from-white via-indigo-200 to-indigo-400 bg-clip-text text-transparent;
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #ffffff 0%, #67e8f9 35%, #60a5fa 65%, #fdba74 100%);
   }
 
   .sidebar-link-active {
     @apply bg-indigo-500/10 text-indigo-400 border-r-2 border-indigo-500;
+  }
+
+  .text-balance {
+    text-wrap: balance;
   }
 }
 

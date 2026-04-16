@@ -1,8 +1,9 @@
 import { Router } from 'express';
 import { body } from 'express-validator';
 import { register, login, getMe, forgotPassword, resetPassword, updateMe, updatePassword, onboardStaff } from '../controllers/authController';
-import { protect } from '../middleware/authMiddleware';
+import { protect, restrictTo } from '../middleware/authMiddleware';
 import { validate } from '../middleware/validate';
+import { UserRole } from '../models/User';
 
 const router = Router();
 
@@ -35,6 +36,6 @@ router.patch('/resetPassword/:token', resetPassword);
 router.use(protect);
 router.patch('/updateMe', updateMe);
 router.patch('/updatePassword', updatePassword);
-router.post('/onboard-staff', onboardStaff);
+router.post('/onboard-staff', restrictTo(UserRole.SUPERADMIN, UserRole.ADMIN), onboardStaff);
 
 export default router;

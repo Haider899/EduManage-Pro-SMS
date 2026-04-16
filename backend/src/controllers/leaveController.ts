@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import Leave from '../models/Leave';
+import { AuthRequest } from '../middleware/authMiddleware';
 
-export const applyLeave = async (req: Request, res: Response) => {
+export const applyLeave = async (req: AuthRequest, res: Response) => {
   try {
     const payload = { ...req.body, user: req.user?._id };
     const l = new Leave(payload);

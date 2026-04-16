@@ -10,6 +10,7 @@ import {
 } from '../controllers/studentController';
 import { protect, restrictTo } from '../middleware/authMiddleware';
 import { validate } from '../middleware/validate';
+import { UserRole } from '../models/User';
 
 const router = Router();
 
@@ -20,7 +21,7 @@ router.get('/:id', getStudentById);
 
 // Admin and HR can create students
 router.post('/', 
-  restrictTo('admin', 'hr'),
+  restrictTo(UserRole.SUPERADMIN, UserRole.ADMIN, UserRole.HR),
   [
     body('name').notEmpty().withMessage('Name is required'),
     body('email').isEmail().withMessage('Valid email is required'),
@@ -40,13 +41,13 @@ router.post('/',
   validate,
   createStudent
 );
-router.post('/bulk', restrictTo('admin', 'hr'), createBulkStudents);
+router.post('/bulk', restrictTo(UserRole.SUPERADMIN, UserRole.ADMIN, UserRole.HR), createBulkStudents);
 
 // Admin and HR can update students
-router.put('/:id', restrictTo('admin', 'hr'), updateStudent);
-router.patch('/:id', restrictTo('admin', 'hr'), updateStudent);
+router.put('/:id', restrictTo(UserRole.SUPERADMIN, UserRole.ADMIN, UserRole.HR), updateStudent);
+router.patch('/:id', restrictTo(UserRole.SUPERADMIN, UserRole.ADMIN, UserRole.HR), updateStudent);
 
 // Only Admin can delete students
-router.delete('/:id', restrictTo('admin'), deleteStudent);
+router.delete('/:id', restrictTo(UserRole.SUPERADMIN, UserRole.ADMIN), deleteStudent);
 
 export default router;

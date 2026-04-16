@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import Attendance from '../models/Attendance';
+import { AuthRequest } from '../middleware/authMiddleware';
 
 export const getAttendance = async (req: Request, res: Response) => {
   try {
@@ -51,10 +52,12 @@ export const markAttendance = async (req: Request, res: Response) => {
   }
 };
 
-export const markAttendanceBulk = async (req: Request, res: Response) => {
+export const markAttendanceBulk = async (req: AuthRequest, res: Response) => {
   try {
     const { date, entries } = req.body;
-    if (!Array.isArray(entries)) return res.status(400).json({ success: false, message: 'Entries array required' });
+    if (!Array.isArray(entries)) {
+      return res.status(400).json({ success: false, message: 'Entries array required' });
+    }
 
     const docs = entries.map((e: any) => ({
       student: e.student || null,
@@ -66,9 +69,9 @@ export const markAttendanceBulk = async (req: Request, res: Response) => {
     }));
 
     const created = await Attendance.insertMany(docs);
-    res.status(201).json({ success: true, data: created });
+    return res.status(201).json({ success: true, data: created });
   } catch (error) {
-    res.status(400).json({ success: false, message: 'Error marking attendance bulk', error });
+    return res.status(400).json({ success: false, message: 'Error marking attendance bulk', error });
   }
 };
 

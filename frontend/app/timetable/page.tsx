@@ -108,7 +108,7 @@ const TimetablePage = () => {
         });
       });
 
-      const res: any = await api.post('/timetable/bulk', { slots, academicYear: '2025-2026' });
+      await api.post('/timetable/bulk', { slots, academicYear: '2025-2026' });
       toast.success('Timetable saved');
       // reflect returned data
       fetchTimetable();

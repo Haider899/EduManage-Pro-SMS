@@ -6,10 +6,11 @@ import Navbar from '@/components/Common/Navbar';
 import AuthGuard from '@/components/Common/AuthGuard';
 import { AuthProvider } from '@/context/AuthContext';
 import { Toaster } from 'react-hot-toast';
+import { AUTH_PAGES } from '@/lib/rbac';
 
 export default function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isAuthPage = pathname === '/login' || pathname === '/register';
+  const isAuthPage = AUTH_PAGES.includes(pathname) || pathname.startsWith('/reset-password/');
 
   return (
     <AuthProvider>
@@ -19,7 +20,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
             {children}
           </main>
         ) : (
-          <div className="relative flex min-h-screen overflow-hidden md:pl-72">
+          <div className="relative flex min-h-screen overflow-hidden md:pl-80">
             <Sidebar />
             <div className="flex-1 flex flex-col overflow-hidden">
               <Navbar />

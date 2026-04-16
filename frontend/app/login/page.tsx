@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
-import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import api from '@/lib/api';
 import Scene3D from '@/components/Common/Scene3D';
@@ -75,7 +74,7 @@ const LoginPage = () => {
           {isMock && (
             <div className="mt-4 px-4 py-2 bg-amber-500/10 border border-amber-500/20 rounded-xl">
                <p className="text-[10px] text-amber-400 font-bold uppercase tracking-wider">
-                 Offline Mode Active: Use LAZY-404 / SuperAdmin899
+                 Offline Mode Active: Use lazy-404 / SuperAdmin899
                </p>
             </div>
           )}

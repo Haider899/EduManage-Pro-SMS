@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiX, FiCheck, FiInfo, FiCalendar, FiFileText, FiShield, FiSend } from 'react-icons/fi';
+import { FiX, FiCalendar, FiSend } from 'react-icons/fi';
 import { toast } from 'react-hot-toast';
 import api from '@/lib/api';
 
@@ -34,7 +34,7 @@ const Modal = ({ isOpen, onClose, title, icon: Icon, color, children }: ModalPro
         >
           <div className="p-8 border-b border-white/5 flex items-center justify-between bg-white/5">
             <div className="flex items-center gap-4">
-              <div className={`h-12 w-12 rounded-2xl bg-${color}-500/10 ${color} flex items-center justify-center shadow-inner`}>
+              <div className={`flex h-12 w-12 items-center justify-center rounded-2xl shadow-inner ${getAccentClasses(color)}`}>
                 <Icon size={22} />
               </div>
               <div>
@@ -51,6 +51,18 @@ const Modal = ({ isOpen, onClose, title, icon: Icon, color, children }: ModalPro
     )}
   </AnimatePresence>
 );
+
+const getAccentClasses = (color: string) => {
+  if (color.includes('amber')) {
+    return 'bg-amber-500/10 text-amber-400';
+  }
+
+  if (color.includes('indigo')) {
+    return 'bg-indigo-500/10 text-indigo-400';
+  }
+
+  return 'bg-cyan-500/10 text-cyan-400';
+};
 
 export const NoticeModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
   const [formData, setFormData] = useState({ title: '', content: '', category: 'administrative' });

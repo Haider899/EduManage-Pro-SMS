@@ -18,7 +18,8 @@ const ResetPasswordPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      return toast.error('Passwords do not match');
+      toast.error('Passwords do not match');
+      return;
     }
     
     setIsLoading(true);
