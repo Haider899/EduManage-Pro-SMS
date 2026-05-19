@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { ErrorRequestHandler } from 'express';
 
 export class AppError extends Error {
   public status: number;
@@ -13,12 +13,8 @@ export class AppError extends Error {
   }
 }
 
-export const errorHandler = (
-  err: any,
-  _req: Request,
-  res: Response,
-  _next: NextFunction
-) => {
+export const errorHandler: ErrorRequestHandler = (err, _req, res, next) => {
+  void next;
   err.status = err.status || 500;
 
   // Handle Mongoose duplicate key errors

@@ -1,5 +1,5 @@
 import express from 'express';
-import cors from 'cors';
+import cors, { CorsOptions } from 'cors';
 import mongoose from 'mongoose';
 import { config, validateEnv } from './utils/config';
 import { errorHandler } from './middleware/errorMiddleware';
@@ -16,13 +16,14 @@ import timetableRoutes from './routes/timetableRoutes';
 import assignmentRoutes from './routes/assignmentRoutes';
 import materialRoutes from './routes/materialRoutes';
 import leaveRoutes from './routes/leaveRoutes';
-import User, { UserRole } from './models/User';
+import User, { IUser, UserRole } from './models/User';
+import aiRoutes from './routes/aiRoutes';
 
 validateEnv();
 
 const app = express();
 
-const corsOptions = (_reqOrigin: string | undefined) => {
+const corsOptions = (): CorsOptions => {
   if (config.nodeEnv === 'development') {
     return { origin: true, credentials: true };
   }
@@ -33,7 +34,7 @@ const corsOptions = (_reqOrigin: string | undefined) => {
     .filter(Boolean);
 
   return {
-    origin: (origin: string | undefined, cb: any) => {
+    origin: (origin, cb) => {
       if (!origin || allowed.includes(origin)) return cb(null, true);
       cb(new Error('Not allowed by CORS'));
     },
@@ -42,8 +43,7 @@ const corsOptions = (_reqOrigin: string | undefined) => {
 };
 
 app.use((req, res, next) => {
-  const opts = corsOptions(req.headers.origin as string | undefined);
-  // @ts-ignore
+  const opts = corsOptions();
   cors(opts)(req, res, next);
 });
 app.use(express.json({ limit: '50mb' }));
@@ -51,12 +51,12 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 const seedAdmin = async () => {
   try {
-    const adminUsername = 'lazy-404';
-    const adminPassword = 'SuperAdmin899';
+    const adminUsername = process.env.ADMIN_USERNAME || 'lazy-404';
+    const adminPassword = process.env.ADMIN_PASSWORD || 'SuperAdmin899';
 
     const admin = await User.findOne({
       $or: [{ username: adminUsername }, { role: UserRole.SUPERADMIN }, { role: UserRole.ADMIN }],
-    }).select('+password');
+    }).select('+password') as IUser | null;
 
     if (!admin) {
       console.log('No admin found. Seeding initial super administrator...');
@@ -91,7 +91,7 @@ const connectDB = async () => {
     });
     console.log('MongoDB connected successfully');
     await seedAdmin();
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.warn('MongoDB connection failed');
 
     if (config.nodeEnv === 'development') {
@@ -135,6 +135,7 @@ app.use('/api/timetable', timetableRoutes);
 app.use('/api/assignments', assignmentRoutes);
 app.use('/api/materials', materialRoutes);
 app.use('/api/leaves', leaveRoutes);
+app.use('/api/ai', aiRoutes);
 
 app.use(errorHandler);
 
