@@ -121,7 +121,6 @@ const AssignmentsPage = () => {
   if (loading || !user) return null;
 
   const displayAssignments = isTeacher ? assignments : studentAssignments;
-  const isOverdue = (dueDate: string) => new Date(dueDate) < new Date();
 
   // TEACHER VIEW
   if (isTeacher) {
