@@ -2,7 +2,16 @@ node_modules/
 dist/
 .env
 .env.local
+.env.*.local
 .DS_Store
 *.log
 .idea/
 .vscode/
+
+# Scratch / test scripts (may contain credentials)
+scratch/
+
+# Secrets & credentials
+*.pem
+*.key
+*.cert
