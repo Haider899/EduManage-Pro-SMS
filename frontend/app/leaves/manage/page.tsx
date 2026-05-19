@@ -32,7 +32,7 @@ const LeaveManagement = () => {
             <FiArrowLeft size={20} />
           </Link>
           <div>
-            <h1 className="text-4xl font-black font-outfit text-white tracking-tight">Leave Management</h1>
+            <h1 className="text-4xl font-black font-outfit text-cyan-400 tracking-tight">Leave Management</h1>
             <p className="text-slate-500 font-inter">Audit & Governance: Absences, Vacations & Medical Leaves</p>
           </div>
         </div>
@@ -62,18 +62,18 @@ const LeaveManagement = () => {
                   <FiUser size={18} />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-white font-inter">{leave.name}</h4>
+                  <h4 className="text-sm font-bold text-cyan-300 font-inter">{leave.name}</h4>
                   <p className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">{leave.role}</p>
                 </div>
               </div>
 
               <div className="col-span-2">
-                <span className="px-3 py-1 bg-slate-900 rounded-lg text-[10px] font-bold text-slate-300 border border-white/5 uppercase">
+                <span className="px-3 py-1 bg-slate-200 dark:bg-slate-800 rounded-lg text-[10px] font-bold text-slate-900 dark:text-slate-200 border border-slate-300 dark:border-slate-700 uppercase">
                   {leave.type}
                 </span>
               </div>
 
-              <div className="col-span-3 flex items-center gap-2 text-slate-400">
+              <div className="col-span-3 flex items-center gap-2 text-slate-600 dark:text-slate-400">
                 <FiCalendar size={14} className="text-indigo-400" />
                 <span className="text-xs font-semibold">{leave.dates}</span>
               </div>

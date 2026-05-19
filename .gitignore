@@ -1,0 +1,51 @@
+# ============================
+# EduManage Pro SMS - Root Gitignore
+# ============================
+
+# Dependencies
+node_modules/
+package-lock.json
+
+# Environment variables (NEVER commit secrets)
+.env
+.env.local
+.env.*.local
+
+# Log files
+*.log
+*.err.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE / Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Build outputs
+dist/
+build/
+out/
+.next/
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Scratch / temporary dev scripts
+scratch/
+*.bat
+*.sh.local
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Test coverage
+coverage/

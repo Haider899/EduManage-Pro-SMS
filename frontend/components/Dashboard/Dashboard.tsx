@@ -22,6 +22,7 @@ import { toast } from 'react-hot-toast';
 import { useAuth } from '@/context/AuthContext';
 import { getRoleMenu, roleProfiles } from '@/lib/rbac';
 import { MeetingModal, NoticeModal } from './QuickActionModals';
+import CircularProgress from '../Common/CircularProgress';
 
 const roleStats = {
   superadmin: [
@@ -163,20 +164,20 @@ const Dashboard = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.65 }}
-        className="glass-panel relative overflow-hidden rounded-[2.5rem] border border-white/10 px-8 py-10 lg:px-12 lg:py-12"
+        className="glass-panel relative overflow-hidden rounded-[2.5rem] px-8 py-10 lg:px-12 lg:py-12"
       >
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.14),transparent_24%),radial-gradient(circle_at_bottom_left,rgba(14,165,233,0.14),transparent_28%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(14,165,233,0.1),transparent_24%),radial-gradient(circle_at_bottom_left,rgba(99,102,241,0.1),transparent_28%)]" />
         <div className="relative grid gap-10 lg:grid-cols-[1.2fr_0.8fr]">
           <div>
             <span className="badge-pill">{profile.badge}</span>
             <div className="mt-5 space-y-4">
-              <p className="text-sm font-semibold uppercase tracking-[0.34em] text-cyan-200/65">School Management System</p>
-              <h1 className="text-balance text-4xl font-black leading-tight text-white md:text-5xl lg:text-6xl">
+              <p className="text-sm font-black uppercase tracking-[0.34em] text-cyan-600 dark:text-cyan-200/65">School Management System</p>
+              <h1 className="text-balance text-4xl font-black leading-tight text-slate-900 dark:text-white md:text-5xl lg:text-6xl">
                 <span className="gradient-text">Welcome back,</span>
                 <br />
                 {user.name}
               </h1>
-              <p className="max-w-2xl text-base leading-7 text-slate-300 lg:text-lg">{profile.strapline}</p>
+              <p className="max-w-2xl text-base font-medium leading-7 text-slate-600 dark:text-slate-300 lg:text-lg">{profile.strapline}</p>
             </div>
 
             <div className="mt-8 flex flex-wrap gap-3">
@@ -207,35 +208,34 @@ const Dashboard = () => {
           <div className="surface-highlight p-6 lg:p-8">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs font-black uppercase tracking-[0.28em] text-cyan-200/70">Operational Pulse</p>
-                <h3 className="mt-2 text-2xl font-black text-white">Performance Surface</h3>
+                <p className="text-xs font-black uppercase tracking-[0.28em] text-cyan-600 dark:text-cyan-200/70">Operational Pulse</p>
+                <h3 className="mt-2 text-2xl font-black text-slate-900 dark:text-white">Performance Surface</h3>
               </div>
-              <div className={`flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${profile.accent}`}>
+              <div className={`flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${profile.accent} shadow-lg`}>
                 <FiStar className="text-xl text-white" />
               </div>
             </div>
 
-            <div className="mt-8 space-y-5">
+            <div className="mt-8 flex justify-between items-center gap-4 flex-wrap">
               {[
-                { label: 'Execution Readiness', value: '96%', width: '96%', tone: 'from-cyan-400 to-blue-600' },
-                { label: 'Engagement Rhythm', value: user.role === 'student' ? '88%' : '92%', width: user.role === 'student' ? '88%' : '92%', tone: 'from-orange-400 to-amber-500' },
-                { label: 'System Confidence', value: '94%', width: '94%', tone: 'from-fuchsia-400 to-violet-600' },
+                { label: 'Readiness', value: 96, color: '#0ea5e9' },
+                { label: 'Engagement', value: user.role === 'student' ? 88 : 92, color: '#f59e0b' },
+                { label: 'Confidence', value: 94, color: '#d946ef' },
               ].map((item) => (
-                <div key={item.label}>
-                  <div className="mb-2 flex items-center justify-between">
-                    <span className="text-xs uppercase tracking-[0.22em] text-slate-400">{item.label}</span>
-                    <span className="text-sm font-black text-white">{item.value}</span>
-                  </div>
-                  <div className="h-2.5 overflow-hidden rounded-full bg-white/5">
-                    <div className={`h-full rounded-full bg-gradient-to-r ${item.tone}`} style={{ width: item.width }} />
-                  </div>
-                </div>
+                <CircularProgress
+                  key={item.label}
+                  percentage={item.value}
+                  size={80}
+                  strokeWidth={8}
+                  color={item.color}
+                  label={item.label}
+                />
               ))}
             </div>
 
-            <div className="mt-8 rounded-[1.7rem] border border-white/10 bg-slate-950/35 p-5">
+            <div className="mt-8 rounded-[1.7rem] border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-slate-950/35 p-5 shadow-sm">
               <p className="text-[10px] font-black uppercase tracking-[0.28em] text-slate-500">Session Summary</p>
-              <p className="mt-3 text-lg font-bold text-white">{profile.summary}</p>
+              <p className="mt-3 text-lg font-bold text-slate-900 dark:text-white leading-relaxed">{profile.summary}</p>
             </div>
           </div>
         </div>
@@ -247,14 +247,14 @@ const Dashboard = () => {
             key={stat.label}
             {...statMotion}
             transition={{ duration: 0.55, delay: index * 0.08 }}
-            className="glass-panel rounded-[2rem] p-6"
+            className="glass-panel rounded-[2rem] p-7 group hover:translate-y-[-4px] transition-all shadow-sm hover:shadow-xl"
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-[11px] font-black uppercase tracking-[0.24em] text-slate-500">{stat.label}</p>
-                <h3 className="mt-4 text-3xl font-black text-white">{stat.value}</h3>
+                <p className="text-[11px] font-black uppercase tracking-[0.24em] text-slate-500 group-hover:text-cyan-600 transition-colors">{stat.label}</p>
+                <h3 className="mt-4 text-3xl font-black text-slate-900 dark:text-white tracking-tight">{stat.value}</h3>
               </div>
-              <div className={`flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${stat.tone}`}>
+              <div className={`flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${stat.tone} shadow-lg`}>
                 <stat.icon className="text-xl text-white" />
               </div>
             </div>
@@ -262,73 +262,97 @@ const Dashboard = () => {
         ))}
       </section>
 
+      <section className="grid gap-6 md:grid-cols-3">
+        {[
+          { label: "Overall Attendance", sub: "Institution Wide", val: 92, col: "#0ea5e9" },
+          { label: "Fee Collection", sub: "Monthly Target", val: 85, col: "#f59e0b" },
+          { label: "Course Completion", sub: "Academic Year", val: 78, col: "#d946ef" }
+        ].map((item, i) => (
+          <motion.article 
+            key={item.label}
+            {...statMotion} 
+            transition={{ delay: i * 0.1 }}
+            className="glass-panel rounded-[2.5rem] p-8 flex flex-col items-center shadow-sm hover:shadow-xl transition-all"
+          >
+            <CircularProgress
+              percentage={item.val}
+              size={160}
+              strokeWidth={14}
+              color={item.col}
+              label={item.label}
+              subLabel={item.sub}
+            />
+          </motion.article>
+        ))}
+      </section>
+
       <section className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
-        <motion.article {...statMotion} className="glass-panel rounded-[2rem] p-7">
+        <motion.article {...statMotion} className="glass-panel rounded-[2.5rem] p-8 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-[10px] font-black uppercase tracking-[0.28em] text-slate-500">Priority Feed</p>
-              <h3 className="mt-2 text-2xl font-black text-white">Role Dashboard Stream</h3>
+              <h3 className="mt-2 text-2xl font-black text-slate-900 dark:text-white tracking-tight">Role Dashboard Stream</h3>
             </div>
-            <div className="badge-pill">
-              <FiCheckCircle />
+            <div className="badge-pill shadow-sm">
+              <FiCheckCircle className="text-cyan-600 dark:text-cyan-400" />
               Active
             </div>
           </div>
 
-          <div className="mt-7 space-y-4">
+          <div className="mt-8 space-y-4">
             {feed.map((item) => (
-              <div key={item.title} className="surface-highlight p-5">
+              <div key={item.title} className="surface-highlight p-6 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors group">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <p className="text-xs font-black uppercase tracking-[0.24em] text-cyan-200/70">{item.meta}</p>
-                    <h4 className="mt-2 text-lg font-bold text-white">{item.title}</h4>
-                    <p className="mt-2 text-sm leading-6 text-slate-300">{item.detail}</p>
+                    <p className="text-xs font-black uppercase tracking-[0.24em] text-cyan-600 dark:text-cyan-200/70">{item.meta}</p>
+                    <h4 className="mt-2 text-lg font-bold text-slate-900 dark:text-white group-hover:text-cyan-600 transition-colors">{item.title}</h4>
+                    <p className="mt-2 text-sm leading-7 text-slate-600 dark:text-slate-300 font-medium">{item.detail}</p>
                   </div>
-                  <FiArrowUpRight className="mt-1 text-slate-500" />
+                  <FiArrowUpRight className="mt-1 text-slate-400 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                 </div>
               </div>
             ))}
           </div>
         </motion.article>
 
-        <motion.article {...statMotion} transition={{ duration: 0.55, delay: 0.15 }} className="glass-panel rounded-[2rem] p-7">
+        <motion.article {...statMotion} transition={{ duration: 0.55, delay: 0.15 }} className="glass-panel rounded-[2.5rem] p-8 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-[10px] font-black uppercase tracking-[0.28em] text-slate-500">Quick Actions</p>
-              <h3 className="mt-2 text-2xl font-black text-white">Fast Operations</h3>
+              <h3 className="mt-2 text-2xl font-black text-slate-900 dark:text-white tracking-tight">Fast Operations</h3>
             </div>
-            <FiTrendingUp className="text-xl text-cyan-300" />
+            <FiTrendingUp className="text-xl text-cyan-600 dark:text-cyan-300" />
           </div>
 
-          <div className="mt-7 space-y-3">
+          <div className="mt-8 space-y-3">
             {quickActions.map((item) =>
               isLinkAction(item) ? (
                 <Link
                   key={item.label}
                   href={item.href}
-                  className="flex items-center justify-between rounded-[1.5rem] border border-white/10 bg-white/5 px-4 py-4 text-white transition hover:bg-white/10"
+                  className="flex items-center justify-between rounded-2xl border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-white/5 px-5 py-4 text-slate-700 dark:text-white transition hover:bg-slate-50 dark:hover:bg-white/10 shadow-sm font-bold"
                 >
-                  <span className="text-sm font-semibold">{item.label}</span>
+                  <span className="text-sm">{item.label}</span>
                   <FiArrowUpRight className="text-slate-400" />
                 </Link>
               ) : (
                 <button
                   key={item.label}
                   onClick={() => (item.action === 'notice' ? setIsNoticeOpen(true) : setIsMeetingOpen(true))}
-                  className="flex w-full items-center justify-between rounded-[1.5rem] border border-white/10 bg-white/5 px-4 py-4 text-white transition hover:bg-white/10"
+                  className="flex w-full items-center justify-between rounded-2xl border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-white/5 px-5 py-4 text-slate-700 dark:text-white transition hover:bg-slate-50 dark:hover:bg-white/10 shadow-sm font-bold"
                 >
-                  <span className="text-sm font-semibold">{item.label}</span>
+                  <span className="text-sm">{item.label}</span>
                   <FiArrowUpRight className="text-slate-400" />
                 </button>
               )
             )}
           </div>
 
-          <div className="mt-7 rounded-[1.7rem] border border-dashed border-cyan-300/20 bg-cyan-400/5 p-5">
-            <p className="text-[10px] font-black uppercase tracking-[0.28em] text-cyan-200/70">Accessible Modules</p>
-            <div className="mt-4 flex flex-wrap gap-2">
+          <div className="mt-8 rounded-[2rem] border border-dashed border-cyan-500/30 bg-cyan-500/5 p-6">
+            <p className="text-[10px] font-black uppercase tracking-[0.28em] text-cyan-600 dark:text-cyan-200/70">Accessible Modules</p>
+            <div className="mt-5 flex flex-wrap gap-2">
               {menu.slice(0, 8).map((item) => (
-                <span key={item.href} className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-slate-200">
+                <span key={item.href} className="rounded-xl border border-slate-200 dark:border-white/10 bg-white/60 dark:bg-white/5 px-3 py-2 text-xs font-bold text-slate-600 dark:text-slate-200 shadow-sm">
                   {item.label}
                 </span>
               ))}

@@ -43,10 +43,10 @@ const StudentImportPage = () => {
 
     try {
       const res: any = await api.post('/students/bulk', { students: fileData });
-      toast.success(`Successfully imported ${res.count} students into the ecosystem!`);
+      toast.success(`Successfully imported ${res.count} students`);
       router.push('/students');
     } catch (err: any) {
-      toast.error(err.response?.data?.message || 'Bulk import protocol failed');
+      toast.error(err.response?.data?.message || 'Bulk import failed');
     } finally {
       setIsLoading(false);
     }
@@ -68,13 +68,13 @@ const StudentImportPage = () => {
         <div className="flex items-center gap-6">
           <Link 
             href="/students"
-            className="h-12 w-12 rounded-2xl bg-slate-900 border border-white/5 flex items-center justify-center text-slate-400 hover:text-white transition-all active:scale-90"
+            className="h-12 w-12 rounded-2xl border border-slate-200 bg-white/60 dark:border-white/10 dark:bg-white/5 flex items-center justify-center text-slate-500 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-white transition-all active:scale-90"
           >
             <FiArrowLeft size={22} />
           </Link>
           <div>
-            <h1 className="text-4xl font-black font-outfit text-white tracking-tight uppercase">Registry Ingestion</h1>
-            <p className="text-slate-500 text-sm font-inter tracking-[0.1em]">Bulk Student Identity Onboarding Protocol</p>
+            <h1 className="text-4xl font-black font-outfit text-slate-900 dark:text-white tracking-tight">Import Students</h1>
+            <p className="text-slate-500 dark:text-slate-400 text-sm font-inter">Upload an Excel or CSV file to add students in bulk</p>
           </div>
         </div>
         
@@ -92,7 +92,7 @@ const StudentImportPage = () => {
         <motion.div 
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="glass-effect rounded-[2.5rem] border-2 border-dashed border-white/10 p-12 flex flex-col items-center justify-center text-center group cursor-pointer hover:border-indigo-500/40 transition-all min-h-[400px]"
+          className="glass-panel rounded-[2rem] border-2 border-dashed border-slate-200 dark:border-white/10 p-12 flex flex-col items-center justify-center text-center group cursor-pointer hover:border-cyan-500/40 transition-all min-h-[400px]"
           onClick={() => document.getElementById('fileInput')?.click()}
         >
           <input 
@@ -105,8 +105,8 @@ const StudentImportPage = () => {
           <div className="h-24 w-24 rounded-3xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-2xl shadow-indigo-500/20">
             <FiUploadCloud size={40} />
           </div>
-          <h3 className="text-xl font-black text-white mb-2 uppercase tracking-wide">Select Registry Source</h3>
-          <p className="text-slate-500 text-sm max-w-xs font-inter">Drop your .xlsx or .csv student directory file here to begin the ingestion process.</p>
+          <h3 className="text-xl font-black text-slate-900 dark:text-white mb-2 tracking-wide">Select Student File</h3>
+          <p className="text-slate-500 dark:text-slate-400 text-sm max-w-xs font-inter">Drop your .xlsx or .csv student file here to preview records before import.</p>
           
           {fileName && (
             <div className="mt-8 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold flex items-center gap-2">
@@ -116,13 +116,13 @@ const StudentImportPage = () => {
           )}
         </motion.div>
 
-        {/* Intelligence Preview */}
+        {/* Import Preview */}
         <motion.div 
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="glass-effect rounded-[2.5rem] border border-white/5 p-10 flex flex-col min-h-[400px]"
+          className="glass-panel rounded-[2rem] border border-slate-200 dark:border-white/10 p-10 flex flex-col min-h-[400px]"
         >
-          <h3 className="text-lg font-black text-white mb-6 uppercase tracking-wider flex items-center gap-3">
+          <h3 className="text-lg font-black text-slate-900 dark:text-white mb-6 uppercase tracking-wider flex items-center gap-3">
             <FiFileText className="text-amber-400" />
             Ingestion Queue
           </h3>
@@ -130,9 +130,9 @@ const StudentImportPage = () => {
           <div className="flex-1 overflow-y-auto max-h-[300px] space-y-3 pr-2 custom-scrollbar">
             {fileData.length > 0 ? (
               fileData.slice(0, 10).map((row, idx) => (
-                <div key={idx} className="p-4 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between group hover:bg-white/10 transition-all">
+                <div key={idx} className="p-4 rounded-2xl bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/5 flex items-center justify-between group hover:bg-slate-50 dark:hover:bg-white/10 transition-all">
                   <div className="flex flex-col">
-                    <span className="text-white text-xs font-bold font-inter">{row.firstName} {row.lastName}</span>
+                    <span className="text-slate-900 dark:text-white text-xs font-bold font-inter">{row.firstName} {row.lastName}</span>
                     <span className="text-slate-500 text-[10px] font-black uppercase tracking-widest">{row.rollNumber || 'NO-REF'}</span>
                   </div>
                   <div className="text-slate-600 font-mono text-[10px]">LID: {idx + 1}</div>
@@ -141,7 +141,7 @@ const StudentImportPage = () => {
             ) : (
               <div className="h-full flex flex-col items-center justify-center text-center opacity-30">
                 <FiAlertCircle size={48} className="mb-4" />
-                <p className="text-xs uppercase font-black tracking-widest">No Intelligence Uploaded</p>
+                <p className="text-xs uppercase font-black tracking-widest">No file selected</p>
               </div>
             )}
             {fileData.length > 10 && (
@@ -153,14 +153,14 @@ const StudentImportPage = () => {
             <button
               onClick={handleImport}
               disabled={fileData.length === 0 || isLoading}
-              className="w-full h-16 rounded-2xl bg-indigo-500 text-white font-black uppercase tracking-[0.3em] shadow-2xl shadow-indigo-500/40 hover:bg-indigo-400 disabled:opacity-50 transition-all active:scale-95 flex items-center justify-center gap-3"
+              className="w-full h-14 rounded-2xl btn-accent text-white font-black uppercase tracking-[0.22em] shadow-xl shadow-blue-500/20 disabled:opacity-50 transition-all active:scale-95 flex items-center justify-center gap-3"
             >
               {isLoading ? (
                 <span className="h-5 w-5 rounded-full border-2 border-white/20 border-t-white animate-spin" />
               ) : (
                 <>
                   <FiCheckCircle size={20} />
-                  Authorize Ingestion
+                  Import Students
                 </>
               )}
             </button>

@@ -112,7 +112,7 @@ const EditTeacherPage = () => {
             <FiArrowLeft size={22} />
           </Link>
           <div>
-            <h1 className="text-4xl font-black font-outfit text-white tracking-tight">Edit Teacher</h1>
+            <h1 className="text-4xl font-black font-outfit text-cyan-400 tracking-tight">Edit Teacher</h1>
             <p className="text-slate-500 text-sm font-inter">Modify record: {formData.firstName} {formData.lastName}</p>
           </div>
         </div>
@@ -129,7 +129,7 @@ const EditTeacherPage = () => {
           <div className="absolute top-0 right-0 p-12 opacity-[0.03] pointer-events-none">
             <FiUser size={120} />
           </div>
-          <h2 className="text-lg font-black font-outfit text-white mb-8 border-l-4 border-teal-500 pl-4 uppercase tracking-wider">
+          <h2 className="text-lg font-black font-outfit text-cyan-400 mb-8 border-l-4 border-cyan-500 pl-4 uppercase tracking-wider">
             Personal Details
           </h2>
           <div className="grid gap-6 md:grid-cols-2">
@@ -201,7 +201,7 @@ const EditTeacherPage = () => {
 
         {/* Section: Professional Info */}
         <div className="glass-effect rounded-[2.5rem] border border-white/5 p-10 shadow-2xl relative overflow-hidden">
-          <h2 className="text-lg font-black font-outfit text-white mb-8 border-l-4 border-amber-500 pl-4 uppercase tracking-wider">
+          <h2 className="text-lg font-black font-outfit text-cyan-400 mb-8 border-l-4 border-cyan-500 pl-4 uppercase tracking-wider">
             Professional Record
           </h2>
           <div className="grid gap-6 md:grid-cols-2">
@@ -283,7 +283,7 @@ const EditTeacherPage = () => {
 
         {/* Section: Address & Status */}
         <div className="glass-effect rounded-[2.5rem] border border-white/5 p-10 shadow-2xl">
-          <h2 className="text-lg font-black font-outfit text-white mb-8 border-l-4 border-rose-500 pl-4 uppercase tracking-wider">
+          <h2 className="text-lg font-black font-outfit text-cyan-400 mb-8 border-l-4 border-cyan-500 pl-4 uppercase tracking-wider">
             Address & Status
           </h2>
           <div className="grid gap-6 md:grid-cols-2">

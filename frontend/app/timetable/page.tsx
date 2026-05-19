@@ -130,7 +130,7 @@ const TimetablePage = () => {
       <div className="flex items-start justify-between">
         <div>
           <h1 className="text-4xl font-bold mb-2">Timetable</h1>
-          <p className="text-slate-400">View class schedule and timings</p>
+          <p className="text-slate-600 dark:text-slate-300">View class schedule and timings</p>
         </div>
 
         {canEdit && (
@@ -193,7 +193,7 @@ const TimetablePage = () => {
                         </button>
                       )}
 
-                      <div className="space-y-1 text-sm text-slate-300">
+                      <div className="space-y-1 text-sm text-slate-700 dark:text-slate-200">
                         <div className="flex items-center gap-2">
                           <FiClock size={16} />
                           {isEditing ? (

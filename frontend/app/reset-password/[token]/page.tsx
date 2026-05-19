@@ -27,7 +27,7 @@ const ResetPasswordPage = () => {
     try {
       const response: any = await api.patch(`/auth/resetPassword/${token}`, { password });
       localStorage.setItem('token', response.token);
-      toast.success('Password updated successfully. Access granted.');
+      toast.success('Password updated successfully.');
       router.push('/');
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Failed to reset password. Link may have expired.');
@@ -37,7 +37,7 @@ const ResetPasswordPage = () => {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center p-6 overflow-hidden bg-slate-950">
+    <div className="relative min-h-screen flex items-center justify-center p-6 overflow-hidden bg-slate-50 dark:bg-slate-950">
       <Scene3D />
       
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-4xl p-24 opacity-30 pointer-events-none">
@@ -49,21 +49,21 @@ const ResetPasswordPage = () => {
         animate={{ opacity: 1, scale: 1, y: 0 }}
         className="relative z-10 w-full max-w-[480px] glass-effect p-10 md:p-14 rounded-5xl shadow-2xl overflow-hidden"
       >
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 via-sky-500 to-purple-600" />
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-700" />
         
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-black tracking-tight text-white mb-4 font-outfit">New Pass-key</h1>
-          <p className="text-slate-400 font-inter">Establish a new secure key for your identity</p>
+          <h1 className="text-4xl font-black tracking-tight text-slate-900 dark:text-white mb-4 font-outfit">New Password</h1>
+          <p className="text-slate-500 dark:text-slate-400 font-inter">Set a new password for your account</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-8">
           <div className="space-y-3">
-            <label className="block text-xs font-bold uppercase tracking-widest text-slate-500 ml-1">New Pass-key</label>
+            <label className="form-label">New Password</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-slate-900/40 border border-slate-800 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/50 transition-all font-inter placeholder:text-slate-700"
+              className="form-field"
               placeholder="••••••••"
               required
               minLength={6}
@@ -71,12 +71,12 @@ const ResetPasswordPage = () => {
           </div>
 
           <div className="space-y-3">
-            <label className="block text-xs font-bold uppercase tracking-widest text-slate-500 ml-1">Confirm Identity Key</label>
+            <label className="form-label">Confirm Password</label>
             <input
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full bg-slate-900/40 border border-slate-800 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/50 transition-all font-inter placeholder:text-slate-700"
+              className="form-field"
               placeholder="••••••••"
               required
             />
@@ -87,7 +87,7 @@ const ResetPasswordPage = () => {
             disabled={isLoading}
             className="w-full btn-accent py-5 rounded-2xl text-base font-black tracking-widest uppercase shadow-2xl shadow-indigo-500/30 hover:shadow-indigo-500/40 transition-all disabled:opacity-50"
           >
-            {isLoading ? 'Updating Key...' : 'Authorize Change'}
+            {isLoading ? 'Updating password...' : 'Update Password'}
           </button>
         </form>
       </motion.div>

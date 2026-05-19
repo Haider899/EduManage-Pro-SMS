@@ -30,14 +30,14 @@ const LeaveApplyPage = () => {
   return (
     <div className="space-y-6 animate-slideInUp">
       <div>
-        <h1 className="text-4xl font-bold mb-2">Apply for Leave</h1>
-        <p className="text-slate-400">Submit a leave request</p>
+        <h1 className="text-4xl font-black text-slate-900 dark:text-white mb-2">Apply for Leave</h1>
+        <p className="text-slate-500 dark:text-slate-400">Submit a leave request for approval</p>
       </div>
 
-      <div className="glass-effect rounded-xl p-6 space-y-4">
+      <div className="form-card space-y-5">
         <label className="block">
-          <span className="text-sm text-slate-300">Leave Type</span>
-          <select value={type} onChange={(e) => setType(e.target.value)} className="w-full bg-transparent p-2 mt-1 rounded border border-slate-700">
+          <span className="form-label">Leave Type</span>
+          <select value={type} onChange={(e) => setType(e.target.value)} className="form-field appearance-none">
             <option value="sick">Sick Leave</option>
             <option value="casual">Casual Leave</option>
             <option value="vacation">Vacation</option>
@@ -46,18 +46,18 @@ const LeaveApplyPage = () => {
         </label>
 
         <label>
-          <span className="text-sm text-slate-300">From</span>
-          <input type="date" value={from} onChange={(e) => setFrom(e.target.value)} className="w-full bg-transparent p-2 mt-1 rounded border border-slate-700" />
+          <span className="form-label">From</span>
+          <input type="date" value={from} onChange={(e) => setFrom(e.target.value)} className="form-field" />
         </label>
 
         <label>
-          <span className="text-sm text-slate-300">To</span>
-          <input type="date" value={to} onChange={(e) => setTo(e.target.value)} className="w-full bg-transparent p-2 mt-1 rounded border border-slate-700" />
+          <span className="form-label">To</span>
+          <input type="date" value={to} onChange={(e) => setTo(e.target.value)} className="form-field" />
         </label>
 
         <label>
-          <span className="text-sm text-slate-300">Reason</span>
-          <textarea value={reason} onChange={(e) => setReason(e.target.value)} className="w-full bg-transparent p-2 mt-1 rounded border border-slate-700" rows={4} />
+          <span className="form-label">Reason</span>
+          <textarea value={reason} onChange={(e) => setReason(e.target.value)} className="form-field" rows={4} />
         </label>
 
         <div className="flex justify-end">

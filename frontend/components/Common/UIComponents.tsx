@@ -24,13 +24,13 @@ export const Card: React.FC<CardProps> = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className={`glass-effect rounded-xl p-6 border border-slate-700 ${
-        hover ? 'card-hover' : ''
+      className={`glass-effect rounded-2xl p-7 border border-slate-200 dark:border-white/10 ${
+        hover ? 'card-hover shadow-sm' : ''
       } ${className}`}
     >
-      {icon && <div className="mb-4">{icon}</div>}
-      {title && <h3 className="text-xl font-semibold mb-2">{title}</h3>}
-      {description && <p className="text-slate-400 text-sm mb-4">{description}</p>}
+      {icon && <div className="mb-5 text-cyan-600 dark:text-cyan-400">{icon}</div>}
+      {title && <h3 className="text-xl font-bold mb-2 text-slate-900 dark:text-white">{title}</h3>}
+      {description && <p className="text-slate-500 dark:text-slate-400 text-sm mb-5 font-medium leading-relaxed">{description}</p>}
       {children}
     </motion.div>
   );
@@ -43,10 +43,10 @@ export const GradientButton: React.FC<{
 }> = ({ children, onClick, className = '' }) => {
   return (
     <motion.button
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
       onClick={onClick}
-      className={`bg-gradient-to-r from-blue-500 to-purple-500 hover:shadow-lg transition rounded-lg font-medium ${className}`}
+      className={`bg-gradient-to-r from-cyan-600 to-blue-700 dark:from-cyan-500 dark:to-blue-600 text-white shadow-lg shadow-blue-500/20 hover:shadow-xl transition rounded-2xl font-bold py-3 px-6 ${className}`}
     >
       {children}
     </motion.button>
@@ -61,17 +61,17 @@ export const StatBox: React.FC<{
 }> = ({ label, value, icon, color = 'text-blue-400' }) => {
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
+      initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5 }}
-      className="glass-effect rounded-lg p-6 border border-slate-700"
+      className="glass-effect rounded-2xl p-7 border border-slate-200 dark:border-white/10 shadow-sm"
     >
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-slate-400 text-sm mb-2">{label}</p>
-          <h3 className="text-3xl font-bold gradient-text">{value}</h3>
+          <p className="text-slate-500 dark:text-slate-400 text-[10px] font-black uppercase tracking-[0.24em] mb-3">{label}</p>
+          <h3 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">{value}</h3>
         </div>
-        {icon && <div className={`text-4xl ${color}`}>{icon}</div>}
+        {icon && <div className={`text-4xl opacity-80 ${color}`}>{icon}</div>}
       </div>
     </motion.div>
   );

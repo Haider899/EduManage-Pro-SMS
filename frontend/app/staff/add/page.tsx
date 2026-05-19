@@ -38,7 +38,7 @@ const StaffOnboardingPage = () => {
     e.preventDefault();
     
     if (formData.password !== confirmPassword) {
-      toast.error('Pass-keys do not match. Please verify your credentials.');
+      toast.error('Passwords do not match. Please check both fields.');
       return;
     }
     
@@ -46,43 +46,43 @@ const StaffOnboardingPage = () => {
 
     try {
       await api.post('/auth/onboard-staff', formData); 
-      toast.success(`Identity established: ${formData.name} authorized as ${formData.role.toUpperCase()}`);
+      toast.success(`${formData.name} added as ${formData.role.toUpperCase()}`);
       if (formData.role === 'teacher') {
         router.push('/teachers');
       } else {
         router.push('/');
       }
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Onboarding protocol failed');
+      toast.error(error.response?.data?.message || 'Failed to add staff member');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const inputClasses = "w-full bg-slate-900/50 border border-slate-800 rounded-2xl py-4 pl-14 pr-6 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500/40 transition-all font-inter shadow-inner";
-  const labelClasses = "text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-1 mb-2 block";
+  const inputClasses = "form-field pl-14 pr-6";
+  const labelClasses = "form-label";
 
   return (
     <div className="max-w-5xl mx-auto pb-20">
       <div className="mb-12 flex items-center gap-6">
         <Link 
           href="/"
-          className="h-12 w-12 rounded-2xl bg-slate-900 border border-white/5 flex items-center justify-center text-slate-400 hover:text-white transition-all active:scale-90 shadow-xl"
+          className="h-12 w-12 rounded-2xl border border-slate-200 bg-white/60 dark:border-white/10 dark:bg-white/5 flex items-center justify-center text-slate-500 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-white transition-all active:scale-90 shadow-sm"
         >
           <FiArrowLeft size={22} />
         </Link>
         <div>
-          <h1 className="text-4xl font-black font-outfit text-white tracking-tight uppercase">Staff Intelligence Portal</h1>
-          <p className="text-slate-500 text-sm font-inter tracking-widest uppercase">Administrative Control Unit: Full Profile Onboarding</p>
+          <h1 className="text-4xl font-black font-outfit text-slate-900 dark:text-white tracking-tight">Add Staff Member</h1>
+          <p className="text-slate-500 dark:text-slate-400 text-sm font-inter">Create a staff profile and portal access</p>
         </div>
       </div>
 
       <div className="grid gap-10">
-        {/* Security Intelligence Banner */}
+        {/* Access Summary Banner */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="glass-effect rounded-[2.5rem] border border-white/5 p-8 relative overflow-hidden bg-gradient-to-br from-indigo-500/5 to-transparent shadow-2xl"
+          className="glass-panel rounded-[2rem] border border-slate-200 dark:border-white/10 p-8 relative overflow-hidden shadow-sm"
         >
           <div className="absolute top-0 right-0 p-8 opacity-[0.05] pointer-events-none">
             <FiShield size={120} />
@@ -91,24 +91,24 @@ const StaffOnboardingPage = () => {
             <div className="h-10 w-10 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center">
               <FiShield size={20} />
             </div>
-            <h2 className="text-sm font-black text-white uppercase tracking-[0.2em]">Security Protocols</h2>
+            <h2 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-[0.2em]">Role Access</h2>
           </div>
           <p className="text-slate-400 text-sm mb-6 max-w-2xl font-inter">
-            Establishing a new staff identity generates a permanent professional record linked to their portal credentials. Ensure all legal data is audited before finalization.
+            Add the staff details carefully. The selected role controls which dashboard modules this user can access.
           </p>
           <div className="grid md:grid-cols-2 gap-6 relative z-10">
-            <div className="flex items-start gap-4 p-4 rounded-2xl bg-white/5 border border-white/5">
+            <div className="flex items-start gap-4 p-4 rounded-2xl bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/5">
               <FiZap className="text-amber-400 mt-1" />
               <p className="text-xs text-slate-400 leading-relaxed font-medium">
-                <span className="text-white font-bold block mb-1">HR Clearance</span>
-                Authorized for Admissions, Notice Management, and Institutional Reporting.
+                <span className="text-slate-900 dark:text-white font-bold block mb-1">HR Access</span>
+                Admissions, notices, leave management, and institutional reports.
               </p>
             </div>
-            <div className="flex items-start gap-4 p-4 rounded-2xl bg-white/5 border border-white/5">
+            <div className="flex items-start gap-4 p-4 rounded-2xl bg-white/60 dark:bg-white/5 border border-slate-200 dark:border-white/5">
               <FiZap className="text-emerald-400 mt-1" />
               <p className="text-xs text-slate-400 leading-relaxed font-medium">
-                <span className="text-white font-bold block mb-1">Faculty Clearance</span>
-                Authorized for Attendance Monitoring, Grading, and Course Management.
+                <span className="text-slate-900 dark:text-white font-bold block mb-1">Teacher Access</span>
+                Attendance, grades, assignments, and course materials.
               </p>
             </div>
           </div>
@@ -123,14 +123,14 @@ const StaffOnboardingPage = () => {
           className="space-y-10"
         >
           {/* Section 1: Primary Identity */}
-          <div className="glass-effect rounded-[3rem] border border-white/5 p-12 shadow-3xl bg-slate-900/40 relative">
-            <h3 className="text-xs font-black text-indigo-400 uppercase tracking-[0.5em] mb-8 flex items-center gap-4">
+          <div className="form-card relative">
+            <h3 className="form-title flex items-center gap-4">
               <span className="h-[2px] w-8 bg-indigo-500/40" />
-              Sector 1: Primary Identity
+              Primary Details
             </h3>
             <div className="grid gap-8 md:grid-cols-2">
               <div className="space-y-1">
-                <label className={labelClasses}>Legal Name</label>
+                <label className={labelClasses}>Full Name</label>
                 <div className="relative group">
                   <FiUser className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-indigo-400 transition-colors" size={18} />
                   <input
@@ -144,7 +144,7 @@ const StaffOnboardingPage = () => {
               </div>
 
               <div className="space-y-1">
-                <label className={labelClasses}>Identity Handle (Username)</label>
+                <label className={labelClasses}>Username</label>
                 <div className="relative group">
                   <FiZap className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-indigo-400 transition-colors" size={18} />
                   <input
@@ -189,10 +189,10 @@ const StaffOnboardingPage = () => {
           </div>
 
           {/* Section 2: Personal Details */}
-          <div className="glass-effect rounded-[3rem] border border-white/5 p-12 shadow-3xl bg-slate-900/40 relative">
-            <h3 className="text-xs font-black text-teal-400 uppercase tracking-[0.5em] mb-8 flex items-center gap-4">
+          <div className="form-card relative">
+            <h3 className="form-title flex items-center gap-4">
               <span className="h-[2px] w-8 bg-teal-500/40" />
-              Sector 2: Personal Details
+              Personal Details
             </h3>
             <div className="grid gap-8 md:grid-cols-3">
               <div className="space-y-1">
@@ -241,10 +241,10 @@ const StaffOnboardingPage = () => {
           </div>
 
           {/* Section 3: Professional Record */}
-          <div className="glass-effect rounded-[3rem] border border-white/5 p-12 shadow-3xl bg-slate-900/40 relative">
-            <h3 className="text-xs font-black text-amber-400 uppercase tracking-[0.5em] mb-8 flex items-center gap-4">
+          <div className="form-card relative">
+            <h3 className="form-title flex items-center gap-4">
               <span className="h-[2px] w-8 bg-amber-500/40" />
-              Sector 3: Professional Record
+              Professional Details
             </h3>
             <div className="grid gap-8 md:grid-cols-2">
               <div className="space-y-1">
@@ -319,10 +319,10 @@ const StaffOnboardingPage = () => {
           </div>
 
           {/* Section 4: Address */}
-          <div className="glass-effect rounded-[3rem] border border-white/5 p-12 shadow-3xl bg-slate-900/40 relative">
-            <h3 className="text-xs font-black text-rose-400 uppercase tracking-[0.5em] mb-8 flex items-center gap-4">
+          <div className="form-card relative">
+            <h3 className="form-title flex items-center gap-4">
               <span className="h-[2px] w-8 bg-rose-500/40" />
-              Sector 4: Address & Location
+              Address & Location
             </h3>
             <div className="grid gap-8 md:grid-cols-2">
               <div className="space-y-1 lg:col-span-2">
@@ -385,14 +385,14 @@ const StaffOnboardingPage = () => {
           </div>
 
           {/* Section 5: Security Credentials */}
-          <div className="glass-effect rounded-[3rem] border border-white/5 p-12 shadow-3xl bg-slate-900/40 relative">
-            <h3 className="text-xs font-black text-purple-400 uppercase tracking-[0.5em] mb-8 flex items-center gap-4">
+          <div className="form-card relative">
+            <h3 className="form-title flex items-center gap-4">
               <span className="h-[2px] w-8 bg-purple-500/40" />
-              Sector 5: Security Credentials
+              Login Credentials
             </h3>
             <div className="grid gap-8 md:grid-cols-2">
               <div className="space-y-1">
-                <label className={labelClasses}>Initial Pass-key</label>
+                <label className={labelClasses}>Password</label>
                 <div className="relative group">
                   <FiLock className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-purple-400 transition-colors" size={18} />
                   <input
@@ -413,7 +413,7 @@ const StaffOnboardingPage = () => {
               </div>
 
               <div className="space-y-1">
-                <label className={labelClasses}>Confirm Pass-key</label>
+                <label className={labelClasses}>Confirm Password</label>
                 <div className="relative group">
                   <FiLock className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-purple-400 transition-colors" size={18} />
                   <input
@@ -442,14 +442,14 @@ const StaffOnboardingPage = () => {
               whileTap={{ scale: 0.98 }}
               type="submit"
               disabled={isLoading}
-              className="w-full h-20 rounded-[2.5rem] bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-700 text-white font-black uppercase tracking-[0.4em] shadow-2xl shadow-indigo-500/40 hover:shadow-indigo-500/60 disabled:opacity-50 transition-all flex items-center justify-center gap-4 text-sm"
+              className="w-full h-16 rounded-[2rem] btn-accent text-white font-black uppercase tracking-[0.22em] shadow-xl shadow-blue-500/20 disabled:opacity-50 transition-all flex items-center justify-center gap-4 text-sm"
             >
               {isLoading ? (
                 <span className="h-6 w-6 rounded-full border-2 border-white/20 border-t-white animate-spin" />
               ) : (
                 <>
                   <FiUserPlus size={24} />
-                  Initialize Staff Identity
+                  Save Staff Member
                 </>
               )}
             </motion.button>
