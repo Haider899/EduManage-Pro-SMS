@@ -30,18 +30,18 @@ const Modal = ({ isOpen, onClose, title, icon: Icon, color, children }: ModalPro
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 20 }}
-          className="relative w-full max-w-xl glass-effect rounded-[3rem] border border-white/10 shadow-3xl overflow-hidden"
+          className="relative w-full max-w-xl glass-panel rounded-[2rem] border border-slate-200 dark:border-white/10 shadow-2xl overflow-hidden text-slate-900 dark:text-slate-100"
         >
-          <div className="p-8 border-b border-white/5 flex items-center justify-between bg-white/5">
+          <div className="p-8 border-b border-slate-200 dark:border-white/5 flex items-center justify-between bg-white/50 dark:bg-white/5">
             <div className="flex items-center gap-4">
               <div className={`flex h-12 w-12 items-center justify-center rounded-2xl shadow-inner ${getAccentClasses(color)}`}>
                 <Icon size={22} />
               </div>
               <div>
-                <h3 className="text-xl font-black font-outfit text-white uppercase tracking-tight">{title}</h3>
+                <h3 className="text-xl font-black font-outfit text-slate-900 dark:text-white tracking-tight">{title}</h3>
               </div>
             </div>
-            <button onClick={onClose} className="h-10 w-10 rounded-xl hover:bg-white/5 flex items-center justify-center text-slate-500 hover:text-white transition-all">
+            <button onClick={onClose} className="h-10 w-10 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">
               <FiX size={20} />
             </button>
           </div>
@@ -73,10 +73,10 @@ export const NoticeModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
     setIsLoading(true);
     try {
       await api.post('/notices', formData);
-      toast.success('Announcement broadcasted across the network');
+      toast.success('Notice published successfully');
       onClose();
     } catch (err) {
-      toast.error('Failed to issue notification protocol');
+      toast.error('Failed to publish notice');
     } finally {
       setIsLoading(false);
     }
@@ -86,26 +86,26 @@ export const NoticeModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
     <Modal isOpen={isOpen} onClose={onClose} title="Issue Notice" icon={FiSend} color="text-amber-400">
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-2">
-          <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Title</label>
+          <label className="form-label">Notice Title</label>
           <input 
             required 
             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-            className="w-full bg-slate-900/50 border border-slate-800 rounded-2xl p-4 text-white focus:outline-none focus:ring-2 focus:ring-amber-500/20"
-            placeholder="Notice Title..."
+            className="form-field"
+            placeholder="Enter notice title"
           />
         </div>
         <div className="space-y-2">
-          <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Content</label>
+          <label className="form-label">Message</label>
           <textarea 
             required 
             rows={4}
             onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-            className="w-full bg-slate-900/50 border border-slate-800 rounded-2xl p-4 text-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 resize-none font-inter text-sm"
-            placeholder="Type announcement details here..."
+            className="form-field resize-none"
+            placeholder="Type notice details here"
           />
         </div>
-        <button type="submit" disabled={isLoading} className="w-full h-16 rounded-2xl bg-amber-500 text-slate-950 font-black uppercase tracking-widest hover:bg-amber-400 transition-all disabled:opacity-50">
-          {isLoading ? 'Authorizing...' : 'Authorize Broadcast'}
+        <button type="submit" disabled={isLoading} className="w-full h-14 btn-accent rounded-2xl text-white font-black uppercase tracking-widest transition-all disabled:opacity-50">
+          {isLoading ? 'Publishing...' : 'Publish Notice'}
         </button>
       </form>
     </Modal>
@@ -121,7 +121,7 @@ export const MeetingModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: ()
     setIsLoading(true);
     try {
       await api.post('/meetings', formData);
-      toast.success('Strategic session added to calendar');
+      toast.success('Meeting scheduled successfully');
       onClose();
     } catch (err) {
       toast.error('Session scheduling failed');
@@ -134,46 +134,46 @@ export const MeetingModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: ()
     <Modal isOpen={isOpen} onClose={onClose} title="Schedule Meeting" icon={FiCalendar} color="text-indigo-400">
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-2">
-          <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Agenda Title</label>
+          <label className="form-label">Meeting Title</label>
           <input 
             required 
             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-            className="w-full bg-slate-900/50 border border-slate-800 rounded-2xl p-4 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
-            placeholder="Meeting Agenda..."
+            className="form-field"
+            placeholder="Enter meeting title"
           />
         </div>
         <div className="space-y-2">
-          <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Session Description</label>
+          <label className="form-label">Description</label>
           <textarea 
             required 
             rows={3}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-            className="w-full bg-slate-900/50 border border-slate-800 rounded-2xl p-4 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 font-inter text-sm"
+            className="form-field"
             placeholder="What is this meeting about?"
           />
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Start Threshold</label>
+            <label className="form-label">Start Time</label>
             <input 
               type="datetime-local" 
               required 
               onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
-              className="w-full bg-slate-900/50 border border-slate-800 rounded-2xl p-4 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-xs"
+              className="form-field text-xs"
             />
           </div>
           <div className="space-y-2">
-            <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">End Threshold</label>
+            <label className="form-label">End Time</label>
             <input 
               type="datetime-local" 
               required 
               onChange={(e) => setFormData({ ...formData, endTime: e.target.value })}
-              className="w-full bg-slate-900/50 border border-slate-800 rounded-2xl p-4 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-xs"
+              className="form-field text-xs"
             />
           </div>
         </div>
-        <button type="submit" disabled={isLoading} className="w-full h-16 rounded-2xl bg-indigo-500 text-white font-black uppercase tracking-widest hover:bg-indigo-400 transition-all disabled:opacity-50">
-          {isLoading ? 'Synchronizing...' : 'Initialize Session'}
+        <button type="submit" disabled={isLoading} className="w-full h-14 btn-accent rounded-2xl text-white font-black uppercase tracking-widest transition-all disabled:opacity-50">
+          {isLoading ? 'Scheduling...' : 'Schedule Meeting'}
         </button>
       </form>
     </Modal>

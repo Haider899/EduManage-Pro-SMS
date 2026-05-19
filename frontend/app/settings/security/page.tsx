@@ -32,7 +32,7 @@ const SecurityPage = () => {
     setLoading(true);
     try {
       await api.patch('/auth/updatePassword', formData);
-      toast.success('Pass-key Updated Successfully');
+      toast.success('Password updated successfully');
       router.push('/profile');
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Update failed');
@@ -50,7 +50,7 @@ const SecurityPage = () => {
       <div className="flex items-center justify-between">
         <button 
           onClick={() => router.back()}
-          className="flex items-center gap-2 text-slate-500 hover:text-white transition-colors text-xs font-black uppercase tracking-widest"
+          className="flex items-center gap-2 text-slate-500 hover:text-cyan-600 dark:hover:text-white transition-colors text-xs font-black uppercase tracking-widest"
         >
           <FiArrowLeft size={16} />
           Back
@@ -60,25 +60,25 @@ const SecurityPage = () => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="glass-effect rounded-5xl border border-white/5 p-10 md:p-14 shadow-2xl relative overflow-hidden"
+        className="glass-panel rounded-[2rem] border border-slate-200 dark:border-white/10 p-10 md:p-14 shadow-sm relative overflow-hidden"
       >
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-black text-white font-outfit uppercase tracking-tight mb-2">Security</h1>
-          <p className="text-slate-400 font-inter">Update your secure access pass-key</p>
+          <h1 className="text-4xl font-black text-slate-900 dark:text-white font-outfit tracking-tight mb-2">Security</h1>
+          <p className="text-slate-500 dark:text-slate-400 font-inter">Update your account password</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-8">
           <div className="space-y-6">
             {/* Current Password */}
             <div className="space-y-3">
-              <label className="block text-xs font-bold uppercase tracking-widest text-slate-500 ml-1">Current Pass-key</label>
+              <label className="form-label">Current Password</label>
               <div className="relative group">
-                <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 transition-colors group-focus-within:text-indigo-400" size={18} />
+                <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-cyan-500" size={18} />
                 <input
                   type={showPasswords.current ? 'text' : 'password'}
                   value={formData.passwordCurrent}
                   onChange={(e) => setFormData({ ...formData, passwordCurrent: e.target.value })}
-                  className="w-full bg-slate-900/40 border border-slate-800 rounded-2xl pl-12 pr-14 py-4 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/50 transition-all font-inter placeholder:text-slate-700 font-medium"
+                  className="form-field pl-12 pr-14"
                   placeholder="••••••••"
                   required
                 />
@@ -92,18 +92,18 @@ const SecurityPage = () => {
               </div>
             </div>
 
-            <div className="h-px bg-white/5 my-4" />
+            <div className="h-px bg-slate-200 dark:bg-white/5 my-4" />
 
             {/* New Password */}
             <div className="space-y-3">
-              <label className="block text-xs font-bold uppercase tracking-widest text-slate-500 ml-1">New Pass-key</label>
+              <label className="form-label">New Password</label>
               <div className="relative group">
-                <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 transition-colors group-focus-within:text-indigo-400" size={18} />
+                <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-cyan-500" size={18} />
                 <input
                   type={showPasswords.new ? 'text' : 'password'}
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  className="w-full bg-slate-900/40 border border-slate-800 rounded-2xl pl-12 pr-14 py-4 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/50 transition-all font-inter placeholder:text-slate-700 font-medium"
+                  className="form-field pl-12 pr-14"
                   placeholder="••••••••"
                   required
                 />
@@ -119,14 +119,14 @@ const SecurityPage = () => {
 
             {/* Confirm Password */}
             <div className="space-y-3">
-              <label className="block text-xs font-bold uppercase tracking-widest text-slate-500 ml-1">Confirm New Pass-key</label>
+              <label className="form-label">Confirm New Password</label>
               <div className="relative group">
-                <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 transition-colors group-focus-within:text-indigo-400" size={18} />
+                <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-cyan-500" size={18} />
                 <input
                   type={showPasswords.confirm ? 'text' : 'password'}
                   value={formData.passwordConfirm}
                   onChange={(e) => setFormData({ ...formData, passwordConfirm: e.target.value })}
-                  className="w-full bg-slate-900/40 border border-slate-800 rounded-2xl pl-12 pr-14 py-4 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/50 transition-all font-inter placeholder:text-slate-700 font-medium"
+                  className="form-field pl-12 pr-14"
                   placeholder="••••••••"
                   required
                 />
@@ -151,7 +151,7 @@ const SecurityPage = () => {
             ) : (
               <>
                 <FiShield size={20} />
-                Update Pass-key
+                Update Password
               </>
             )}
           </button>

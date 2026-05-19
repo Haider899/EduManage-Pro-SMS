@@ -17,7 +17,7 @@ const GradesPage = () => {
       {/* Header */}
       <div>
         <h1 className="text-4xl font-bold mb-2">Grade Management</h1>
-        <p className="text-slate-400">View and manage student grades and performance</p>
+        <p className="text-slate-600 dark:text-slate-300">View and manage student grades and performance</p>
       </div>
 
       {/* Grade Distribution */}
@@ -42,10 +42,10 @@ const GradesPage = () => {
               className="space-y-2"
             >
               <div className="flex items-center justify-between mb-2">
-                <span className="font-medium">{item.grade}</span>
-                <span className="text-slate-400">{item.count} students</span>
+                <span className="font-bold text-slate-900 dark:text-white">{item.grade}</span>
+                <span className="text-slate-600 dark:text-slate-300 text-sm font-medium">{item.count} students</span>
               </div>
-              <div className="h-3 bg-slate-700 rounded-full overflow-hidden">
+              <div className="h-3 bg-slate-300 dark:bg-slate-700 rounded-full overflow-hidden">
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${item.percentage * 3}%` }}
@@ -53,7 +53,7 @@ const GradesPage = () => {
                   className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"
                 ></motion.div>
               </div>
-              <div className="text-xs text-slate-400">{item.percentage * 3}%</div>
+              <div className="text-xs text-slate-600 dark:text-slate-400 font-semibold">{item.percentage * 3}%</div>
             </motion.div>
           ))}
         </div>
@@ -82,11 +82,11 @@ const GradesPage = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.3 + idx * 0.1 }}
-              className="bg-slate-800/30 p-6 rounded-lg hover:bg-slate-800/50 transition"
+              className="bg-slate-100 dark:bg-slate-800/50 p-6 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700/50 transition"
             >
-              <p className="text-slate-400 text-sm mb-2">{metric.label}</p>
+              <p className="text-slate-600 dark:text-slate-400 text-sm mb-2">{metric.label}</p>
               <h3 className="text-2xl font-bold gradient-text mb-2">{metric.value}</h3>
-              <p className="text-xs text-green-400">{metric.trend} from last month</p>
+              <p className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold">{metric.trend} from last month</p>
             </motion.div>
           ))}
         </div>

@@ -81,8 +81,8 @@ const EditStudentPage = () => {
     }
   };
 
-  const inputClasses = "w-full bg-slate-900/50 border border-slate-800 rounded-2xl py-3.5 pl-12 pr-6 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500/40 transition-all font-inter text-sm";
-  const labelClasses = "text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1 mb-2 block";
+  const inputClasses = "form-field pl-12 pr-6";
+  const labelClasses = "form-label";
 
   if (isFetching) {
     return (
@@ -103,13 +103,13 @@ const EditStudentPage = () => {
         <div className="flex items-center gap-6">
           <Link
             href="/students"
-            className="h-12 w-12 rounded-2xl bg-slate-900 border border-white/5 flex items-center justify-center text-slate-400 hover:text-white transition-all active:scale-90"
+            className="h-12 w-12 rounded-2xl border border-slate-200 bg-white/60 dark:border-white/10 dark:bg-white/5 flex items-center justify-center text-slate-500 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-white transition-all active:scale-90"
           >
             <FiArrowLeft size={22} />
           </Link>
           <div>
-            <h1 className="text-4xl font-black font-outfit text-white tracking-tight">Edit Student</h1>
-            <p className="text-slate-500 text-sm font-inter">Modify student record: {formData.firstName} {formData.lastName}</p>
+            <h1 className="text-4xl font-black font-outfit text-slate-900 dark:text-white tracking-tight">Edit Student</h1>
+            <p className="text-slate-500 dark:text-slate-400 text-sm font-inter">Update student profile for {formData.firstName} {formData.lastName}</p>
           </div>
         </div>
       </div>
@@ -120,13 +120,13 @@ const EditStudentPage = () => {
         animate={{ opacity: 1, y: 0 }}
         className="space-y-8"
       >
-        {/* Section: Personal Intelligence */}
-        <div className="glass-effect rounded-[2.5rem] border border-white/5 p-10 shadow-2xl relative overflow-hidden">
+        {/* Section: Personal Details */}
+        <div className="form-card relative overflow-hidden">
           <div className="absolute top-0 right-0 p-12 opacity-[0.03] pointer-events-none">
             <FiUser size={120} />
           </div>
-          <h2 className="text-lg font-black font-outfit text-white mb-8 border-l-4 border-indigo-500 pl-4 uppercase tracking-wider">
-            Personal Intelligence
+          <h2 className="form-title">
+            Personal Details
           </h2>
           <div className="grid gap-6 md:grid-cols-2">
             <div className="space-y-1">
@@ -173,7 +173,7 @@ const EditStudentPage = () => {
               <select
                 value={formData.gender}
                 onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
-                className="w-full bg-slate-900/50 border border-slate-800 rounded-2xl py-3.5 px-6 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500/40 transition-all font-inter text-sm appearance-none"
+                className="form-field appearance-none cursor-pointer"
               >
                 <option value="male">Male</option>
                 <option value="female">Female</option>
@@ -196,13 +196,13 @@ const EditStudentPage = () => {
         </div>
 
         {/* Section: Academic Allocation */}
-        <div className="glass-effect rounded-[2.5rem] border border-white/5 p-10 shadow-2xl relative overflow-hidden">
-          <h2 className="text-lg font-black font-outfit text-white mb-8 border-l-4 border-emerald-500 pl-4 uppercase tracking-wider">
-            Academic Allocation
+        <div className="form-card relative overflow-hidden">
+          <h2 className="form-title">
+            Academic Details
           </h2>
           <div className="grid gap-6 md:grid-cols-3">
             <div className="space-y-1">
-              <label className={labelClasses}>Registry Number (Roll)</label>
+              <label className={labelClasses}>Roll Number</label>
               <div className="relative group">
                 <FiHash className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-indigo-400 transition-colors" size={18} />
                 <input
@@ -214,7 +214,7 @@ const EditStudentPage = () => {
               </div>
             </div>
             <div className="space-y-1">
-              <label className={labelClasses}>Class Level</label>
+              <label className={labelClasses}>Class</label>
               <div className="relative group">
                 <FiLayers className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-indigo-400 transition-colors" size={18} />
                 <input
@@ -226,7 +226,7 @@ const EditStudentPage = () => {
               </div>
             </div>
             <div className="space-y-1">
-              <label className={labelClasses}>Section Unit</label>
+              <label className={labelClasses}>Section</label>
               <div className="relative group">
                 <FiTag className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-indigo-400 transition-colors" size={18} />
                 <input
@@ -241,13 +241,13 @@ const EditStudentPage = () => {
         </div>
 
         {/* Section: Contact & Portal */}
-        <div className="glass-effect rounded-[2.5rem] border border-white/5 p-10 shadow-2xl">
-          <h2 className="text-lg font-black font-outfit text-white mb-8 border-l-4 border-amber-500 pl-4 uppercase tracking-wider">
+        <div className="form-card">
+          <h2 className="form-title">
             Contact & Status
           </h2>
           <div className="grid gap-6 md:grid-cols-2">
             <div className="space-y-1">
-              <label className={labelClasses}>System Email</label>
+              <label className={labelClasses}>Email</label>
               <div className="relative group">
                 <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-indigo-400 transition-colors" size={18} />
                 <input
@@ -263,7 +263,7 @@ const EditStudentPage = () => {
               <select
                 value={formData.status}
                 onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                className="w-full bg-slate-900/50 border border-slate-800 rounded-2xl py-3.5 px-6 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500/40 transition-all font-inter text-sm appearance-none"
+                className="form-field appearance-none cursor-pointer"
               >
                 <option value="active">Active</option>
                 <option value="inactive">Inactive</option>
@@ -274,8 +274,8 @@ const EditStudentPage = () => {
         </div>
 
         {/* Guardian & Residence */}
-        <div className="glass-effect rounded-[2.5rem] border border-white/5 p-10 shadow-2xl">
-          <h2 className="text-lg font-black font-outfit text-white mb-8 border-l-4 border-rose-500 pl-4 uppercase tracking-wider">
+        <div className="form-card">
+          <h2 className="form-title">
             Guardian & Residence
           </h2>
           <div className="grid gap-6 md:grid-cols-2">
@@ -325,7 +325,7 @@ const EditStudentPage = () => {
             whileTap={{ scale: 0.98 }}
             type="submit"
             disabled={isLoading}
-            className="w-full h-20 rounded-[2.5rem] bg-gradient-to-r from-emerald-500 via-teal-600 to-emerald-700 text-white font-black uppercase tracking-[0.4em] shadow-2xl shadow-emerald-500/40 hover:shadow-emerald-500/60 disabled:opacity-50 transition-all flex items-center justify-center gap-4 text-sm"
+            className="w-full h-16 rounded-[2rem] btn-accent text-white font-black uppercase tracking-[0.22em] shadow-xl shadow-blue-500/20 disabled:opacity-50 transition-all flex items-center justify-center gap-4 text-sm"
           >
             {isLoading ? (
               <span className="h-6 w-6 rounded-full border-2 border-white/20 border-t-white animate-spin" />

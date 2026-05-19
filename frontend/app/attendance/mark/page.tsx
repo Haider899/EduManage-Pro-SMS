@@ -45,25 +45,25 @@ const MarkAttendance = () => {
   return (
     <div className="space-y-6 animate-slideInUp">
       <div>
-        <h1 className="text-3xl font-bold">Mark Attendance</h1>
-        <p className="text-slate-400">Select date and mark students present/absent</p>
+        <h1 className="text-4xl font-black text-slate-900 dark:text-white">Mark Attendance</h1>
+        <p className="text-slate-500 dark:text-slate-400">Select a date and mark each student present or absent</p>
       </div>
 
-      <div className="glass-effect p-4 rounded-xl">
-        <div className="flex items-center gap-4">
-          <DatePicker selected={date} onChange={(d: Date | null) => setDate(d)} />
+      <div className="form-card">
+        <div className="flex flex-wrap items-center gap-4">
+          <DatePicker selected={date} onChange={(d: Date | null) => setDate(d)} className="form-field" />
           <button className="btn-ghost btn-pill" onClick={() => setDate(new Date())}>Today</button>
           <label className="flex items-center gap-2">
             <input type="checkbox" checked={editPast} onChange={() => setEditPast(p => !p)} />
-            <span className="text-slate-400">Edit past</span>
+            <span className="text-sm font-bold text-slate-600 dark:text-slate-300">Edit past records</span>
           </label>
           <button className="btn-accent btn-pill" onClick={save}>Save</button>
         </div>
 
-        <div className="mt-4 space-y-2">
+        <div className="mt-6 space-y-3">
           {students.map(s => (
-            <div key={s.id} className="flex items-center justify-between">
-              <div>{s.name}</div>
+            <div key={s.id} className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white/60 px-5 py-4 dark:border-white/10 dark:bg-white/5">
+              <div className="font-bold text-slate-900 dark:text-white">{s.name}</div>
               <div>
                 <label className="swap">
                   <input type="checkbox" checked={s.present} onChange={() => toggle(s.id)} />

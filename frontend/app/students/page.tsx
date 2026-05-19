@@ -55,7 +55,7 @@ const StudentList = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-4xl font-bold mb-2">Students</h1>
-          <p className="text-slate-400">Manage student records and information</p>
+          <p className="text-slate-600 dark:text-slate-300">Manage student records and information</p>
         </div>
         <Link href="/students/add">
           <motion.button
@@ -75,7 +75,7 @@ const StudentList = () => {
         <input
           type="text"
           placeholder="Search students..."
-          className="bg-transparent outline-none w-full"
+          className="bg-transparent outline-none w-full text-slate-900 dark:text-white placeholder:text-slate-500 dark:placeholder:text-slate-400"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
@@ -120,14 +120,14 @@ const StudentList = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: idx * 0.05 }}
-                    className="border-b border-slate-700 hover:bg-slate-800/20 transition"
+                    className="border-b border-slate-200 dark:border-slate-700 hover:bg-cyan-50 dark:hover:bg-cyan-500/10 transition"
                   >
-                    <td className="px-6 py-4 font-medium whitespace-nowrap">
+                    <td className="px-6 py-4 font-medium whitespace-nowrap text-slate-900 dark:text-white">
                       {student.firstName} {student.lastName}
                     </td>
-                    <td className="px-6 py-4 text-slate-300">{student.rollNumber || 'N/A'}</td>
-                    <td className="px-6 py-4 text-slate-300">{student.class || 'N/A'}</td>
-                    <td className="px-6 py-4 text-slate-300">{student.email}</td>
+                    <td className="px-6 py-4 text-slate-700 dark:text-slate-200">{student.rollNumber || 'N/A'}</td>
+                    <td className="px-6 py-4 text-slate-700 dark:text-slate-200">{student.class || 'N/A'}</td>
+                    <td className="px-6 py-4 text-slate-700 dark:text-slate-200">{student.email}</td>
                     <td className="px-6 py-4">
                       <span
                         className={`px-3 py-1 rounded-full text-xs font-medium ${

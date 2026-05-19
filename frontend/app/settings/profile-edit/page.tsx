@@ -33,7 +33,7 @@ const ProfileEditPage = () => {
     try {
       await api.patch('/auth/updateMe', formData);
       await refreshUser();
-      toast.success('Identity Updated Successfully');
+      toast.success('Profile updated successfully');
       router.push('/profile');
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Update failed');
@@ -47,7 +47,7 @@ const ProfileEditPage = () => {
       <div className="flex items-center justify-between">
         <button 
           onClick={() => router.back()}
-          className="flex items-center gap-2 text-slate-500 hover:text-white transition-colors text-xs font-black uppercase tracking-widest"
+          className="flex items-center gap-2 text-slate-500 hover:text-cyan-600 dark:hover:text-white transition-colors text-xs font-black uppercase tracking-widest"
         >
           <FiArrowLeft size={16} />
           Back
@@ -57,24 +57,24 @@ const ProfileEditPage = () => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="glass-effect rounded-5xl border border-white/5 p-10 md:p-14 shadow-2xl relative overflow-hidden"
+        className="glass-panel rounded-[2rem] border border-slate-200 dark:border-white/10 p-10 md:p-14 shadow-sm relative overflow-hidden"
       >
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-black text-white font-outfit uppercase tracking-tight mb-2">Editor</h1>
-          <p className="text-slate-400 font-inter">Recalibrate your administrative identity</p>
+          <h1 className="text-4xl font-black text-slate-900 dark:text-white font-outfit tracking-tight mb-2">Edit Profile</h1>
+          <p className="text-slate-500 dark:text-slate-400 font-inter">Update your name and email address</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-8">
           <div className="space-y-6">
             <div className="space-y-3">
-              <label className="block text-xs font-bold uppercase tracking-widest text-slate-500 ml-1">Full Identity Name</label>
+              <label className="form-label">Full Name</label>
               <div className="relative group">
-                <FiUser className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 transition-colors group-focus-within:text-indigo-400" size={18} />
+                <FiUser className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-cyan-500" size={18} />
                 <input
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full bg-slate-900/40 border border-slate-800 rounded-2xl pl-12 pr-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/50 transition-all font-inter placeholder:text-slate-700 font-medium"
+                  className="form-field pl-12 pr-5"
                   placeholder="Your Full Name"
                   required
                 />
@@ -82,14 +82,14 @@ const ProfileEditPage = () => {
             </div>
 
             <div className="space-y-3">
-              <label className="block text-xs font-bold uppercase tracking-widest text-slate-500 ml-1">Primary Email Node</label>
+              <label className="form-label">Email Address</label>
               <div className="relative group">
-                <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 transition-colors group-focus-within:text-indigo-400" size={18} />
+                <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-cyan-500" size={18} />
                 <input
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full bg-slate-900/40 border border-slate-800 rounded-2xl pl-12 pr-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/50 transition-all font-inter placeholder:text-slate-700 font-medium"
+                  className="form-field pl-12 pr-5"
                   placeholder="name@institution.com"
                   required
                 />
@@ -107,7 +107,7 @@ const ProfileEditPage = () => {
             ) : (
               <>
                 <FiSave size={20} />
-                Commit Changes
+                Save Changes
               </>
             )}
           </button>

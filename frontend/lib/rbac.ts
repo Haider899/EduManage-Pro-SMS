@@ -74,7 +74,7 @@ export const roleProfiles: Record<Role, RoleProfile> = {
 
 export const menuItems: MenuItem[] = [
   { icon: FiHome, label: 'Dashboard', href: '/', description: 'Personalized overview', roles: ['superadmin', 'admin', 'hr', 'teacher', 'student'] },
-  { icon: FiShield, label: 'Staff Access', href: '/staff/add', description: 'Create privileged identities', roles: ['superadmin', 'admin'] },
+  { icon: FiShield, label: 'Staff Access', href: '/staff/add', description: 'Create privileged identities', roles: ['superadmin', 'admin', 'hr'] },
   { icon: FiUsers, label: 'Students', href: '/students', description: 'Directory and records', roles: ['superadmin', 'admin', 'hr', 'teacher'] },
   { icon: FiUsers, label: 'New Student', href: '/students/add', description: 'Admission workflow', roles: ['superadmin', 'admin', 'hr'] },
   { icon: FiLayers, label: 'Bulk Import', href: '/students/import', description: 'Mass enrollment intake', roles: ['superadmin', 'admin', 'hr'] },
@@ -88,7 +88,7 @@ export const menuItems: MenuItem[] = [
   { icon: FiFileText, label: 'Reports', href: '/reports/full', description: 'Institution insights', roles: ['superadmin', 'admin'] },
   { icon: FiCalendar, label: 'Leave Desk', href: '/leaves/manage', description: 'Approvals and workforce planning', roles: ['superadmin', 'admin', 'hr'] },
   { icon: FiCalendar, label: 'Apply Leave', href: '/leaves/apply', description: 'Submit a leave request', roles: ['superadmin', 'teacher'] },
-  { icon: FiBookOpen, label: 'Assignments', href: '/assignments', description: 'Task planning and distribution', roles: ['superadmin', 'teacher'] },
+  { icon: FiBookOpen, label: 'Assignments', href: '/assignments', description: 'Task planning and distribution', roles: ['superadmin', 'teacher', 'student'] },
   { icon: FiBookOpen, label: 'Materials', href: '/teachers/materials', description: 'Teaching resources', roles: ['superadmin', 'teacher'] },
   { icon: FiUser, label: 'Profile', href: '/profile', description: 'Personal account details', roles: ['superadmin', 'admin', 'hr', 'teacher', 'student'] },
 ];

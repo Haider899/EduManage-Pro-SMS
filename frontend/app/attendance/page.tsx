@@ -5,9 +5,9 @@ import { FiCalendar, FiCheckCircle, FiXCircle, FiAlertCircle } from 'react-icons
 
 const AttendancePage = () => {
   const attendanceStats = [
-    { label: 'Present', count: 1156, color: 'bg-green-500/20 text-green-400', icon: FiCheckCircle },
-    { label: 'Absent', count: 45, color: 'bg-red-500/20 text-red-400', icon: FiXCircle },
-    { label: 'Late', count: 33, color: 'bg-yellow-500/20 text-yellow-400', icon: FiAlertCircle },
+    { label: 'Present', count: 1156, color: 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-700', icon: FiCheckCircle },
+    { label: 'Absent', count: 45, color: 'bg-rose-100 dark:bg-rose-900/30 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-700', icon: FiXCircle },
+    { label: 'Late', count: 33, color: 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-700', icon: FiAlertCircle },
   ];
 
   return (
@@ -15,7 +15,7 @@ const AttendancePage = () => {
       {/* Header */}
       <div>
         <h1 className="text-4xl font-bold mb-2">Attendance Management</h1>
-        <p className="text-slate-400">Track student attendance for today and previous days</p>
+        <p className="text-slate-600 dark:text-slate-300">Track student attendance for today and previous days</p>
       </div>
 
       {/* Stats */}
@@ -30,7 +30,7 @@ const AttendancePage = () => {
           >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-300 text-sm mb-2">{stat.label}</p>
+                <p className="text-sm mb-2 font-semibold">{stat.label}</p>
                 <h3 className="text-3xl font-bold">{stat.count}</h3>
               </div>
               <stat.icon size={32} />
@@ -61,13 +61,13 @@ const AttendancePage = () => {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 + idx * 0.1 }}
-              className="flex items-center justify-between p-4 bg-slate-800/30 rounded-lg hover:bg-slate-800/50 transition"
+              className="flex items-center justify-between p-4 bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700/50 transition"
             >
-              <span className="font-medium">{item.grade}</span>
+              <span className="font-bold text-slate-900 dark:text-white">{item.grade}</span>
               <div className="flex items-center gap-6 text-sm">
-                <span className="text-green-400">Present: {item.present}</span>
-                <span className="text-red-400">Absent: {item.absent}</span>
-                <span className="text-yellow-400">Late: {item.late}</span>
+                <span className="text-emerald-600 dark:text-emerald-400 font-semibold">Present: {item.present}</span>
+                <span className="text-rose-600 dark:text-rose-400 font-semibold">Absent: {item.absent}</span>
+                <span className="text-amber-600 dark:text-amber-400 font-semibold">Late: {item.late}</span>
               </div>
             </motion.div>
           ))}
