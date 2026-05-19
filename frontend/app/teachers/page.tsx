@@ -90,7 +90,7 @@ const TeacherList = () => {
         <input
           type="text"
           placeholder="Search teachers..."
-          className="bg-transparent outline-none w-full"
+          className="bg-transparent outline-none w-full text-slate-900 dark:text-white placeholder:text-slate-500 dark:placeholder:text-slate-400"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
@@ -118,13 +118,13 @@ const TeacherList = () => {
             <tbody>
               {isLoading ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-8 text-center text-slate-400">
+                  <td colSpan={6} className="px-6 py-8 text-center text-slate-600 dark:text-slate-400">
                     Loading teachers...
                   </td>
                 </tr>
               ) : filteredTeachers.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-8 text-center text-slate-400">
+                  <td colSpan={6} className="px-6 py-8 text-center text-slate-600 dark:text-slate-400">
                     No teachers found.
                   </td>
                 </tr>
@@ -135,15 +135,15 @@ const TeacherList = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: idx * 0.05 }}
-                    className="border-b border-slate-700 hover:bg-slate-800/20 transition"
+                    className="border-b border-slate-200 dark:border-slate-700 hover:bg-cyan-50 dark:hover:bg-cyan-500/10 transition"
                   >
-                    <td className="px-6 py-4 font-medium whitespace-nowrap">
+                    <td className="px-6 py-4 font-medium whitespace-nowrap text-slate-900 dark:text-white">
                       {teacher.name || `${teacher.firstName} ${teacher.lastName}`}
                     </td>
-                    <td className="px-6 py-4 text-slate-300">{teacher.employeeId || 'N/A'}</td>
-                    <td className="px-6 py-4 text-slate-300">{teacher.subject || 'N/A'}</td>
-                    <td className="px-6 py-4 text-slate-300">{teacher.experience ? `${teacher.experience} years` : 'N/A'}</td>
-                    <td className="px-6 py-4 text-slate-300">{teacher.email}</td>
+                    <td className="px-6 py-4 text-slate-700 dark:text-slate-200">{teacher.employeeId || 'N/A'}</td>
+                    <td className="px-6 py-4 text-slate-700 dark:text-slate-200">{teacher.subject || 'N/A'}</td>
+                    <td className="px-6 py-4 text-slate-700 dark:text-slate-200">{teacher.experience ? `${teacher.experience} years` : 'N/A'}</td>
+                    <td className="px-6 py-4 text-slate-700 dark:text-slate-200">{teacher.email}</td>
                     <td className="px-6 py-4 flex items-center gap-3">
                       <Link href={`/teachers/edit/${teacher._id}`}>
                         <button className="p-2 hover:bg-slate-700 rounded-lg transition" title="Edit Teacher">

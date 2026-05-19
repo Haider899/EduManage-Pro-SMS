@@ -40,7 +40,7 @@ const LibraryPage = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-4xl font-bold mb-2">Library Management</h1>
-          <p className="text-slate-400">Browse and manage library books</p>
+          <p className="text-slate-600 dark:text-slate-300">Browse and manage library books</p>
         </div>
       </div>
 
@@ -50,7 +50,7 @@ const LibraryPage = () => {
         <input
           type="text"
           placeholder="Search books by title or author..."
-          className="bg-transparent outline-none w-full"
+          className="bg-transparent outline-none w-full text-slate-900 dark:text-white placeholder:text-slate-500 dark:placeholder:text-slate-400"
         />
       </div>
 
@@ -70,7 +70,7 @@ const LibraryPage = () => {
           >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-400 text-sm mb-2">{stat.label}</p>
+                <p className="text-slate-600 dark:text-slate-300 text-sm mb-2 font-medium">{stat.label}</p>
                 <h3 className="text-3xl font-bold gradient-text">{stat.value}</h3>
               </div>
               <stat.icon size={28} className="text-purple-400" />
@@ -103,24 +103,24 @@ const LibraryPage = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 + idx * 0.1 }}
-                className="border-b border-slate-700 hover:bg-slate-800/20 transition"
+                className="border-b border-slate-200 dark:border-slate-700 hover:bg-cyan-50 dark:hover:bg-cyan-500/10 transition"
               >
-                <td className="px-6 py-4 font-medium">{book.title}</td>
-                <td className="px-6 py-4 text-slate-300">{book.author}</td>
+                <td className="px-6 py-4 font-medium text-slate-900 dark:text-white">{book.title}</td>
+                <td className="px-6 py-4 text-slate-700 dark:text-slate-200">{book.author}</td>
                 <td className="px-6 py-4">
-                  <span className="px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full text-xs">
+                  <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 rounded-full text-xs font-semibold">
                     {book.category}
                   </span>
                 </td>
                 <td className="px-6 py-4">
-                  <span className={book.available > 0 ? 'text-green-400' : 'text-red-400'}>
+                  <span className={book.available > 0 ? 'text-emerald-600 dark:text-emerald-400 font-semibold' : 'text-rose-600 dark:text-rose-400 font-semibold'}>
                     {book.available} / {book.total}
                   </span>
                 </td>
                 <td className="px-6 py-4">
                   <button
                     disabled={book.available === 0}
-                    className="px-4 py-2 bg-blue-500/20 text-blue-300 rounded-lg hover:bg-blue-500/30 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                    className="px-4 py-2 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-900/60 disabled:opacity-50 disabled:cursor-not-allowed transition font-semibold"
                   >
                     Issue
                   </button>

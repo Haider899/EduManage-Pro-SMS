@@ -4,107 +4,157 @@
 
 @layer base {
   :root {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --panel: rgba(10, 16, 31, 0.74);
-    --panel-border: rgba(255, 255, 255, 0.1);
+    --background: #f8fafc;
+    --foreground: #0f172a;
+    --panel: rgba(255, 255, 255, 0.7);
+    --panel-border: rgba(0, 0, 0, 0.05);
+  }
+
+  .dark {
+    --background: #020617;
+    --foreground: #f8fafc;
+    --panel: rgba(15, 23, 42, 0.7);
+    --panel-border: rgba(255, 255, 255, 0.05);
   }
 
   * {
-    @apply border-slate-800;
+    @apply border-slate-200 dark:border-slate-800;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
   }
 
   body {
-    @apply bg-slate-950 text-slate-100 font-inter antialiased;
-    background:
-      radial-gradient(circle at top, rgba(14, 165, 233, 0.22), transparent 24%),
-      radial-gradient(circle at 20% 20%, rgba(249, 115, 22, 0.18), transparent 20%),
-      radial-gradient(circle at 80% 30%, rgba(217, 70, 239, 0.14), transparent 22%),
-      linear-gradient(180deg, #040712 0%, #07111f 42%, #030712 100%);
+    @apply bg-slate-50 text-slate-900 font-inter antialiased dark:bg-slate-950 dark:text-slate-100;
     min-height: 100vh;
   }
 }
 
 @layer components {
   .glass-effect {
-    @apply bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl;
+    @apply bg-white/40 dark:bg-slate-900/40 backdrop-blur-xl border border-slate-200 dark:border-white/10 shadow-lg dark:shadow-2xl transition-all duration-300;
   }
 
   .glass-panel {
     background: var(--panel);
     border: 1px solid var(--panel-border);
     box-shadow:
-      0 22px 70px rgba(2, 6, 23, 0.55),
+      0 10px 40px rgba(0, 0, 0, 0.04),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(20px);
+  }
+
+  .dark .glass-panel {
+    box-shadow:
+      0 22px 70px rgba(0, 0, 0, 0.5),
       inset 0 1px 0 rgba(255, 255, 255, 0.04);
-    backdrop-filter: blur(26px);
   }
 
   .btn-accent {
-    @apply text-white font-bold transition-all duration-300 shadow-2xl active:scale-95;
-    background-image: linear-gradient(135deg, #22d3ee 0%, #3b82f6 45%, #fb923c 100%);
-    box-shadow: 0 22px 45px rgba(14, 165, 233, 0.25);
+    @apply text-white font-bold transition-all duration-300 shadow-md active:scale-95;
+    background-image: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 50%, #6366f1 100%);
+  }
+
+  .btn-accent:hover {
+    @apply shadow-lg brightness-110;
+    box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
   }
 
   .tab-pill {
-    @apply px-4 py-2 rounded-full bg-slate-800/50 border border-slate-700 text-slate-300 text-sm hover:bg-slate-700 transition-all;
+    @apply px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-sm hover:bg-slate-200 dark:hover:bg-slate-700 transition-all;
   }
 
   .card-hover {
-    @apply transition-all duration-300 hover:translate-y-[-4px] hover:shadow-indigo-500/10;
+    @apply transition-all duration-300 hover:translate-y-[-4px] hover:shadow-xl dark:hover:shadow-indigo-500/10;
   }
 
   .btn-ghost {
-    @apply bg-white/5 border border-white/10 text-slate-200 font-semibold transition-all duration-200 shadow-inner hover:bg-white/10;
+    @apply bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-200 font-bold transition-all duration-200 hover:bg-slate-200 dark:hover:bg-white/10;
   }
 
   .btn-pill {
-    @apply rounded-full px-6 py-3 inline-flex items-center gap-3;
+    @apply rounded-full px-6 py-3 inline-flex items-center justify-center gap-3;
   }
 
   .badge-pill {
-    @apply inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[11px] font-black uppercase tracking-[0.24em] text-slate-300;
+    @apply inline-flex items-center gap-2 rounded-full border border-slate-200 dark:border-white/10 bg-slate-100/50 dark:bg-white/5 px-4 py-2 text-[10px] font-black uppercase tracking-[0.24em] text-cyan-600 dark:text-slate-300;
   }
 
   .surface-highlight {
-    @apply rounded-[2rem] border border-white/10 bg-white/[0.04] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)];
+    @apply rounded-[2rem] border border-slate-200 dark:border-white/10 bg-white/60 dark:bg-white/[0.04] shadow-sm;
   }
 
-  .pulse-track {
-    @apply bg-white/5 rounded-full h-2 w-full overflow-hidden;
+  .input-field {
+    @apply w-full bg-white/50 dark:bg-slate-950/30 border border-slate-200 dark:border-slate-700 rounded-2xl px-4 py-3 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-500/50 transition-all;
   }
 
-  .pulse-fill-green {
-    background: linear-gradient(90deg,#10b981,#06b6d4);
-    @apply h-2 rounded-full;
+  .form-card {
+    @apply rounded-[2rem] border border-slate-200 p-6 shadow-sm md:p-8 dark:border-white/10;
+    background: var(--panel);
+    backdrop-filter: blur(20px);
   }
 
-  .pulse-fill-violet {
-    background: linear-gradient(90deg,#7c3aed,#8b5cf6);
-    @apply h-2 rounded-full;
+  .form-title {
+    @apply mb-6 border-l-4 border-cyan-500 pl-4 text-sm font-black uppercase tracking-[0.22em] text-slate-900 dark:text-white;
   }
 
-  .pulse-fill-blue {
-    background: linear-gradient(90deg,#06b6d4,#3b82f6);
-    @apply h-2 rounded-full;
+  .form-label {
+    @apply mb-2 ml-1 block text-[10px] font-black uppercase tracking-[0.22em] text-slate-700 dark:text-slate-200;
+  }
+
+  .form-field {
+    @apply w-full rounded-2xl border border-slate-200 bg-white/70 px-4 py-3.5 text-sm font-medium text-slate-900 placeholder:text-slate-500 shadow-sm transition-all focus:border-cyan-500/50 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 dark:border-slate-700 dark:bg-slate-950/35 dark:text-slate-100 dark:placeholder:text-slate-400;
+  }
+
+  .page-title {
+    @apply font-outfit text-4xl font-black tracking-tight text-slate-900 dark:text-white;
+  }
+
+  .page-subtitle {
+    @apply font-inter text-sm font-medium leading-6 text-slate-500 dark:text-slate-400;
+  }
+
+  .section-title {
+    @apply font-outfit text-lg font-black tracking-tight text-slate-900 dark:text-white;
+  }
+
+  .eyebrow-label {
+    @apply text-[10px] font-black uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400;
+  }
+
+  .data-value {
+    @apply text-lg font-bold text-slate-900 dark:text-slate-100;
   }
 }
 
 @layer utilities {
   .gradient-text {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, #ffffff 0%, #67e8f9 35%, #60a5fa 65%, #fdba74 100%);
+    background-image: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 50%, #6366f1 100%);
   }
 
   .sidebar-link-active {
-    @apply bg-indigo-500/10 text-indigo-400 border-r-2 border-indigo-500;
+    @apply bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border-r-2 border-cyan-500;
   }
 
   .text-balance {
     text-wrap: balance;
   }
+}
+
+/* Form Elements Global Reset */
+input:not([type='checkbox']):not([type='radio']):not([type='file']),
+select,
+textarea {
+  @apply rounded-2xl border border-slate-200 bg-white/70 text-slate-900 placeholder:text-slate-500 shadow-sm transition-all focus:border-cyan-500/50 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 dark:border-slate-700 dark:bg-slate-950/35 dark:text-slate-100 dark:placeholder:text-slate-400;
+}
+
+input[type='file'] {
+  @apply rounded-2xl border border-slate-200 bg-white/60 p-3 text-sm font-medium text-slate-600 shadow-sm transition-all file:mr-4 file:rounded-full file:border-0 file:bg-cyan-50 file:px-4 file:py-2 file:text-sm file:font-bold file:text-cyan-700 hover:file:bg-cyan-100 dark:border-slate-700 dark:bg-slate-950/35 dark:text-slate-300 dark:file:bg-white/5 dark:file:text-white;
+}
+
+option {
+  @apply bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100;
 }
 
 /* Custom Scrollbar */

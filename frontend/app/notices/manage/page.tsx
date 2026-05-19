@@ -45,13 +45,13 @@ const NoticeManagement = () => {
         <div className="flex items-center gap-4">
           <Link 
             href="/"
-            className="h-12 w-12 rounded-2xl bg-slate-900 border border-white/5 flex items-center justify-center text-slate-400 hover:text-white transition-all hover:scale-105"
+            className="h-12 w-12 rounded-2xl border border-slate-200 bg-white/60 dark:border-white/10 dark:bg-white/5 flex items-center justify-center text-slate-500 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-white transition-all hover:scale-105"
           >
             <FiArrowLeft size={20} />
           </Link>
           <div>
-            <h1 className="text-4xl font-black font-outfit text-white tracking-tight">Notice Board</h1>
-            <p className="text-slate-500 font-inter">Broadcast Communications & Internal Announcements</p>
+            <h1 className="text-4xl font-black font-outfit text-slate-900 dark:text-white tracking-tight">Notice Board</h1>
+            <p className="text-slate-500 dark:text-slate-400 font-inter">Create and manage school announcements</p>
           </div>
         </div>
       </div>
@@ -61,34 +61,34 @@ const NoticeManagement = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="glass-effect rounded-[2.5rem] p-10 border border-white/5 shadow-2xl"
+          className="glass-panel rounded-[2rem] p-8 border border-slate-200 dark:border-white/10 shadow-sm"
         >
           <div className="flex items-center gap-4 mb-8">
-            <div className="h-10 w-10 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-400">
+            <div className="h-10 w-10 rounded-xl bg-cyan-500/10 flex items-center justify-center text-cyan-500">
               <FiPlus size={20} />
             </div>
-            <h3 className="text-xl font-bold text-white font-outfit">Compose Notice</h3>
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white font-outfit">Compose Notice</h3>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Title</label>
+              <label className="form-label">Title</label>
               <input
                 type="text"
                 required
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="w-full bg-slate-900/50 border border-slate-800 rounded-2xl py-4 px-6 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500/40 transition-all font-inter"
+                className="form-field"
                 placeholder="Notice Headline"
               />
             </div>
 
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Category</label>
+              <label className="form-label">Category</label>
               <select
                 value={formData.category}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                className="w-full bg-slate-900/50 border border-slate-800 rounded-2xl py-4 px-6 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500/40 transition-all font-inter appearance-none"
+                className="form-field appearance-none"
               >
                 <option value="administrative">Administrative</option>
                 <option value="academic">Academic</option>
@@ -98,13 +98,13 @@ const NoticeManagement = () => {
             </div>
 
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Content</label>
+              <label className="form-label">Message</label>
               <textarea
                 required
                 rows={4}
                 value={formData.content}
                 onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                className="w-full bg-slate-900/50 border border-slate-800 rounded-2xl py-4 px-6 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500/40 transition-all font-inter resize-none"
+                className="form-field resize-none"
                 placeholder="Detail the announcement..."
               />
             </div>
@@ -112,9 +112,9 @@ const NoticeManagement = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-indigo-600 hover:bg-indigo-500 py-4 rounded-2xl text-sm font-black tracking-widest uppercase transition-all shadow-xl shadow-indigo-500/20 text-white"
+              className="w-full btn-accent py-4 rounded-2xl text-sm font-black tracking-widest uppercase transition-all shadow-xl shadow-blue-500/20 text-white"
             >
-              🚀 {isLoading ? 'Publishing...' : 'Broadcast Notice'}
+              {isLoading ? 'Publishing...' : 'Publish Notice'}
             </button>
           </form>
         </motion.div>
@@ -122,8 +122,8 @@ const NoticeManagement = () => {
         {/* Live Notices Feed */}
         <div className="space-y-6">
           <div className="flex items-center justify-between mb-4 px-2">
-            <h3 className="text-xl font-bold text-white font-outfit">Active Feed</h3>
-            <span className="text-xs text-slate-500 bg-slate-900 px-3 py-1 rounded-full border border-white/5">Real-time</span>
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white font-outfit">Active Notices</h3>
+            <span className="badge-pill">Latest</span>
           </div>
           
           {notices.map((notice, index) => (
@@ -132,7 +132,7 @@ const NoticeManagement = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.1 }}
               key={notice.id}
-              className="glass-effect rounded-3xl p-6 border border-white/5 relative group hover:border-indigo-500/30 transition-all"
+              className="glass-panel rounded-3xl p-6 border border-slate-200 dark:border-white/10 relative group hover:border-cyan-500/30 transition-all"
             >
               <div className="flex justify-between items-start mb-4">
                 <div className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest ${
@@ -145,10 +145,10 @@ const NoticeManagement = () => {
                   <span className="text-[10px] font-bold">{notice.date}</span>
                 </div>
               </div>
-              <h4 className="text-lg font-bold text-white mb-2 font-outfit">{notice.title}</h4>
+              <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-2 font-outfit">{notice.title}</h4>
               <p className="text-sm text-slate-400 font-inter line-clamp-2">{notice.content}</p>
               
-              <div className="mt-4 pt-4 border-t border-white/5 flex justify-end">
+              <div className="mt-4 pt-4 border-t border-slate-200 dark:border-white/5 flex justify-end">
                 <button className="text-slate-600 hover:text-red-400 transition-colors">
                   <FiTrash2 size={16} />
                 </button>
