@@ -1,0 +1,432 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ==========================================
+// 1. CORE AUTHENTICATION & USER MANAGEMENT
+// ==========================================
+
+model User {
+  id                   String       @id @default(uuid())
+  name                 String
+  email                String?      @unique
+  username             String       @unique
+  password             String
+  role                 UserRole     @default(student)
+  avatar               String?
+  refId                String?      // Links to Student/Teacher/HR ID if applicable
+  passwordResetToken   String?
+  passwordResetExpires DateTime?
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+
+  // Relationships
+  assignmentsCreated   Assignment[]
+  materialsUploaded    Material[]
+  meetingsOrganized    Meeting[]    @relation("MeetingOrganizer")
+  meetingsAttended     Meeting[]    @relation("MeetingParticipants")
+  noticesAuthored      Notice[]
+  leavesRequested      Leave[]      @relation("LeaveUser")
+  leavesApproved       Leave[]      @relation("LeaveApprover")
+}
+
+enum UserRole {
+  superadmin
+  admin
+  hr
+  teacher
+  student
+}
+
+// ==========================================
+// 2. HR & ROSTER MANAGEMENT
+// ==========================================
+
+model HR {
+  id           String   @id @default(uuid())
+  employeeId   String   @unique
+  firstName    String
+  lastName     String
+  email        String   @unique
+  phone        String
+  joiningDate  DateTime @default(now())
+  address      String
+  status       HRStatus @default(active)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([employeeId])
+}
+
+enum HRStatus {
+  active
+  inactive
+}
+
+// ==========================================
+// 3. ACADEMIC STRUCTURE
+// ==========================================
+
+model Class {
+  id           String       @id @default(uuid())
+  name         String
+  classNumber  Int
+  section      String
+  capacity     Int
+  classTeacher String?      // References Teacher.id
+  description  String?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  // Relationships
+  teacher      Teacher?     @relation(fields: [classTeacher], references: [id], onDelete: SetNull)
+  assignments  Assignment[]
+  attendances  Attendance[]
+  grades       Grade[]
+  materials    Material[]
+  timetables   Timetable[]
+}
+
+model Student {
+  id            String        @id @default(uuid())
+  rollNumber    String        @unique
+  firstName     String
+  lastName      String
+  email         String        @unique
+  phone         String
+  dateOfBirth   DateTime
+  gender        Gender
+  class         String
+  section       String
+  address       String?
+  city          String?
+  state         String?
+  pinCode       String?
+  parentName    String
+  parentPhone   String
+  parentEmail   String?
+  admissionDate DateTime      @default(now())
+  photo         String        @default("https://via.placeholder.com/150")
+  status        StudentStatus @default(active)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  // Relationships
+  attendances   Attendance[]
+  fees          Fee[]
+  grades        Grade[]
+  issuedBooks   LibraryIssue[]
+
+  @@index([rollNumber])
+}
+
+enum StudentStatus {
+  active
+  inactive
+  graduated
+}
+
+model Teacher {
+  id             String        @id @default(uuid())
+  employeeId     String        @unique
+  firstName      String
+  lastName       String
+  email          String        @unique
+  phone          String        @default("000-000-0000")
+  dateOfBirth    DateTime?
+  gender         Gender        @default(other)
+  qualification  String        @default("Not Specified")
+  experience     Float         @default(0)
+  specialization String[]
+  address        String?
+  city           String?
+  state          String?
+  pinCode        String?
+  joiningDate    DateTime      @default(now())
+  salary         Float         @default(0)
+  photo          String        @default("https://via.placeholder.com/150")
+  status         TeacherStatus @default(active)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  // Relationships
+  managedClasses Class[]
+  markedAttendance Attendance[]
+  timetables     Timetable[]
+
+  @@index([employeeId])
+}
+
+enum TeacherStatus {
+  active
+  inactive
+  on_leave      @map("on-leave")
+}
+
+enum Gender {
+  male
+  female
+  other
+}
+
+// ==========================================
+// 4. CORE CLASSROOM ACTIONS
+// ==========================================
+
+model Assignment {
+  id          String             @id @default(uuid())
+  title       String
+  classId     String?
+  due         DateTime?
+  description String?
+  attachments Json[]             // Stores array of objects like {filename: string, url: string}
+  createdByUserId String
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  // Relationships
+  class       Class?             @relation(fields: [classId], references: [id], onDelete: Cascade)
+  author      User               @relation(fields: [createdByUserId], references: [id])
+}
+
+model Attendance {
+  id         String           @id @default(uuid())
+  studentId  String
+  classId    String
+  date       DateTime         @default(now())
+  status     AttendanceStatus
+  remarks    String?
+  markedByTeacherId String?
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+
+  // Relationships
+  student    Student          @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  class      Class            @relation(fields: [classId], references: [id], onDelete: Cascade)
+  teacher    Teacher?         @relation(fields: [markedByTeacherId], references: [id], onDelete: SetNull)
+
+  @@index([studentId, date])
+  @@index([classId, date])
+}
+
+enum AttendanceStatus {
+  present
+  absent
+  late
+  excused
+}
+
+model Material {
+  id              String   @id @default(uuid())
+  title           String?
+  classId         String?
+  files           Json[]   // Stores array of {filename: string, url: string}
+  uploadedByUserId String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relationships
+  class           Class?   @relation(fields: [classId], references: [id], onDelete: Cascade)
+  uploader        User     @relation(fields: [uploadedByUserId], references: [id])
+}
+
+model Timetable {
+  id           String   @id @default(uuid())
+  classId      String
+  dayOfWeek    Int
+  subject      String
+  teacherId    String?
+  startTime    String
+  endTime      String
+  room         String
+  academicYear String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relationships
+  class        Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  teacher      Teacher? @relation(fields: [teacherId], references: [id], onDelete: SetNull)
+
+  @@index([classId, dayOfWeek])
+}
+
+// ==========================================
+// 5. GRADES & FINANCIALS
+// ==========================================
+
+model Grade {
+  id          String       @id @default(uuid())
+  studentId   String
+  subject     String
+  classId     String
+  semester    String
+  term        String
+  marks       Float
+  maxMarks    Float
+  percentage  Float
+  grade       String
+  remarks     String?
+  basedOn     GradeBasis?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  // Relationships
+  student     Student      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  class       Class        @relation(fields: [classId], references: [id], onDelete: Cascade)
+
+  @@index([studentId, subject])
+  @@index([classId, semester])
+}
+
+enum GradeBasis {
+  test
+  exam
+  practical
+  assignment
+}
+
+model Fee {
+  id            String        @id @default(uuid())
+  studentId     String
+  feeType       String
+  amount        Float
+  dueDate       DateTime
+  paidDate      DateTime?
+  status        FeeStatus     @default(pending)
+  remarks       String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  // Relationships
+  student       Student       @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([studentId])
+}
+
+enum FeeStatus {
+  pending
+  paid
+  partial
+  overdue
+}
+
+// ==========================================
+// 6. NOTIFICATIONS & COMMUNICATIONS
+// ==========================================
+
+model Notice {
+  id        String   @id @default(uuid())
+  title     String
+  content   String
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String
+  priority  String   @default("normal")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Meeting {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  date        DateTime
+  organizer   User     @relation("MeetingOrganizer", fields: [organizerId], references: [id])
+  organizerId String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Many-to-many relationship for participants
+  participants User[] @relation("MeetingParticipants")
+}
+
+// ==========================================
+// 7. LEAVE MANAGEMENT
+// ==========================================
+
+model Leave {
+  id         String       @id @default(uuid())
+  userId     String
+  user       User         @relation("LeaveUser", fields: [userId], references: [id])
+  approverId String?
+  approver   User?        @relation("LeaveApprover", fields: [approverId], references: [id])
+  startDate  DateTime
+  endDate    DateTime
+  reason     String
+  status     LeaveStatus  @default(pending)
+  type       LeaveType
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+
+  @@index([userId, status])
+}
+
+enum LeaveType {
+  casual
+  medical
+  emergency
+  other
+}
+
+enum LeaveStatus {
+  pending
+  approved
+  rejected
+}
+
+// ==========================================
+// 8. LIBRARY MANAGEMENT
+// ==========================================
+
+model LibraryBook {
+  id            String   @id @default(uuid())
+  title         String
+  author        String
+  isbn          String   @unique
+  publisher     String?
+  category      String?
+  quantity      Int      @default(1)
+  available     Int      @default(1)
+  acquisitionDate DateTime @default(now())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relationships
+  issues        LibraryIssue[]
+}
+
+model LibraryIssue {
+  id          String   @id @default(uuid())
+  bookId      String
+  studentId   String
+  issueDate   DateTime @default(now())
+  dueDate     DateTime
+  returnDate  DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relationships
+  book        LibraryBook @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  student     Student     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([bookId])
+  @@index([studentId])
+}
+
+// ==========================================
+// 9. REPORTS
+// ==========================================
+
+model Report {
+  id          String   @id @default(uuid())
+  title       String
+  type        String   // academic, financial, attendance, etc.
+  generatedBy String
+  data        Json
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

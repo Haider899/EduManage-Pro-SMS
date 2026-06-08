@@ -1,0 +1,322 @@
+{
+  "name": "Architecture Diagram",
+  "description": "Generated architecture diagram",
+  "components": [
+    {
+      "id": "user_client",
+      "type": "user",
+      "name": "External User / Third‑Party",
+      "position": {
+        "x": -1065,
+        "y": 420
+      },
+      "properties": {
+        "tech_stack": "N/A",
+        "description": "External users and third‑party integration clients."
+      }
+    },
+    {
+      "id": "load_balancer",
+      "type": "load_balancer",
+      "name": "Load Balancer",
+      "position": {
+        "x": -690,
+        "y": -150
+      },
+      "properties": {
+        "tech_stack": "NGINX, HAProxy",
+        "description": "Distribute inbound traffic across services."
+      }
+    },
+    {
+      "id": "api_gateway",
+      "type": "api_gateway",
+      "name": "API Gateway",
+      "position": {
+        "x": -135,
+        "y": 435
+      },
+      "properties": {
+        "tech_stack": "Kong, AWS API Gateway",
+        "description": "Secure entry point, request routing, rate limiting, authentication enforcement.",
+        "scalability": "horizontal"
+      }
+    },
+    {
+      "id": "frontend",
+      "type": "frontend",
+      "name": "Web Frontend",
+      "position": {
+        "x": -570,
+        "y": 1065
+      },
+      "properties": {
+        "tech_stack": "React",
+        "runtime": "JavaScript/TypeScript",
+        "description": "Multi‑tenant UI single‑page application."
+      }
+    },
+    {
+      "id": "auth_service",
+      "type": "auth_service",
+      "name": "Authentication Service",
+      "position": {
+        "x": 375,
+        "y": -690
+      },
+      "properties": {
+        "tech_stack": "OAuth2, OpenID Connect",
+        "description": "Handles login, JWT issuance, RBAC policy enforcement."
+      }
+    },
+    {
+      "id": "microservice_course",
+      "type": "microservice",
+      "name": "Course Service",
+      "position": {
+        "x": 435,
+        "y": 975
+      },
+      "properties": {
+        "tech_stack": "Node.js, Express",
+        "description": "Course catalog management with tenant‑isolated data.",
+        "scalability": "horizontal"
+      }
+    },
+    {
+      "id": "microservice_student",
+      "type": "microservice",
+      "name": "Student Service",
+      "position": {
+        "x": 705,
+        "y": 195
+      },
+      "properties": {
+        "tech_stack": "Java Spring Boot",
+        "description": "Student profile and enrollment management.",
+        "scalability": "horizontal"
+      }
+    },
+    {
+      "id": "microservice_enrollment",
+      "type": "microservice",
+      "name": "Enrollment Service",
+      "position": {
+        "x": 825,
+        "y": -180
+      },
+      "properties": {
+        "tech_stack": "Python Flask",
+        "description": "Enrollment workflows and event publishing.",
+        "scalability": "horizontal"
+      }
+    },
+    {
+      "id": "database",
+      "type": "database",
+      "name": "PostgreSQL (Tenant‑Isolated)",
+      "position": {
+        "x": 2040,
+        "y": 75
+      },
+      "properties": {
+        "tech_stack": "PostgreSQL",
+        "description": "Stores tenant‑specific data with schema isolation and row‑level security.",
+        "scalability": "vertical/horizontal"
+      }
+    },
+    {
+      "id": "cache",
+      "type": "cache",
+      "name": "Redis Cache",
+      "position": {
+        "x": 1845,
+        "y": 630
+      },
+      "properties": {
+        "tech_stack": "Redis",
+        "description": "Session store and query result caching."
+      }
+    },
+    {
+      "id": "message_queue",
+      "type": "message_queue",
+      "name": "Kafka Event Bus",
+      "position": {
+        "x": 825,
+        "y": -510
+      },
+      "properties": {
+        "tech_stack": "Apache Kafka",
+        "description": "Asynchronous event streaming for audit logs and notifications."
+      }
+    },
+    {
+      "id": "notification",
+      "type": "notification",
+      "name": "Notification Service",
+      "position": {
+        "x": 1440,
+        "y": -405
+      },
+      "properties": {
+        "tech_stack": "AWS SNS, Twilio",
+        "description": "Sends email and SMS alerts to users."
+      }
+    },
+    {
+      "id": "monitoring",
+      "type": "monitoring",
+      "name": "Monitoring & Alerting",
+      "position": {
+        "x": 2865,
+        "y": 150
+      },
+      "properties": {
+        "tech_stack": "Prometheus, Grafana",
+        "description": "Collects metrics, generates alerts."
+      }
+    },
+    {
+      "id": "logging",
+      "type": "logging",
+      "name": "Log Aggregation",
+      "position": {
+        "x": 2370,
+        "y": -330
+      },
+      "properties": {
+        "tech_stack": "ELK Stack (Elasticsearch, Logstash, Kibana)",
+        "description": "Centralized log collection and analysis."
+      }
+    }
+  ],
+  "connections": [
+    {
+      "from": "user_client",
+      "to": "frontend",
+      "type": "direct",
+      "label": "Load SPA"
+    },
+    {
+      "from": "frontend",
+      "to": "api_gateway",
+      "type": "direct",
+      "label": "Call backend APIs"
+    },
+    {
+      "from": "api_gateway",
+      "to": "auth_service",
+      "type": "direct",
+      "label": "Authenticate & authorize"
+    },
+    {
+      "from": "auth_service",
+      "to": "database",
+      "type": "direct",
+      "label": "Fetch role & permission data"
+    },
+    {
+      "from": "load_balancer",
+      "to": "api_gateway",
+      "type": "direct",
+      "label": "Forward traffic"
+    },
+    {
+      "from": "api_gateway",
+      "to": "microservice_course",
+      "type": "direct",
+      "label": "Course Service API"
+    },
+    {
+      "from": "api_gateway",
+      "to": "microservice_student",
+      "type": "direct",
+      "label": "Student Service API"
+    },
+    {
+      "from": "api_gateway",
+      "to": "microservice_enrollment",
+      "type": "direct",
+      "label": "Enrollment Service API"
+    },
+    {
+      "from": "microservice_course",
+      "to": "database",
+      "type": "direct",
+      "label": "Read/Write course data"
+    },
+    {
+      "from": "microservice_student",
+      "to": "database",
+      "type": "direct",
+      "label": "Read/Write student data"
+    },
+    {
+      "from": "microservice_enrollment",
+      "to": "database",
+      "type": "direct",
+      "label": "Read/Write enrollment data"
+    },
+    {
+      "from": "microservice_course",
+      "to": "cache",
+      "type": "direct",
+      "label": "Read/write cache"
+    },
+    {
+      "from": "microservice_student",
+      "to": "cache",
+      "type": "direct",
+      "label": "Read/write cache"
+    },
+    {
+      "from": "microservice_enrollment",
+      "to": "cache",
+      "type": "direct",
+      "label": "Read/write cache"
+    },
+    {
+      "from": "microservice_enrollment",
+      "to": "message_queue",
+      "type": "http",
+      "label": "Publish enrollment events"
+    },
+    {
+      "from": "message_queue",
+      "to": "notification",
+      "type": "http",
+      "label": "Consume for notifications"
+    },
+    {
+      "from": "notification",
+      "to": "user_client",
+      "type": "direct",
+      "label": "Deliver alerts"
+    },
+    {
+      "from": "monitoring",
+      "to": "api_gateway",
+      "type": "direct",
+      "label": "Collect metrics"
+    },
+    {
+      "from": "logging",
+      "to": "microservice_course",
+      "type": "direct",
+      "label": "Write logs"
+    },
+    {
+      "from": "logging",
+      "to": "microservice_student",
+      "type": "direct",
+      "label": "Write logs"
+    },
+    {
+      "from": "logging",
+      "to": "microservice_enrollment",
+      "type": "direct",
+      "label": "Write logs"
+    }
+  ]
+}
