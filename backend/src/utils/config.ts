@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// MONGODB_URI ko change kar DATABASE_URL use kiya gaya hai is app me 
+// DATABASE_URL is used for the database connection in this application
 const requiredEnvVars = [
   'DATABASE_URL',
   'JWT_SECRET',
@@ -19,7 +19,7 @@ export const validateEnv = () => {
 
 export const config = {
   port: process.env.PORT || 5000,
-  // mongodbUri ki jagah databaseUrl property set ki
+  // Database URL for Prisma/Supabase PostgreSQL
   databaseUrl: process.env.DATABASE_URL!,
   jwtSecret: process.env.JWT_SECRET!,
   jwtExpire: process.env.JWT_EXPIRE || '7d',

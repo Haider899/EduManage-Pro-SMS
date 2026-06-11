@@ -17,11 +17,10 @@ export const errorHandler: ErrorRequestHandler = (err, _req, res, next) => {
   void next;
   err.status = err.status || 500;
 
-  // Handle Mongoose duplicate key errors
-  if (err.code === 11000) {
-    const field = Object.keys(err.keyValue)[0];
-    const value = err.keyValue[field];
-    err.message = `The ${field} '${value}' is already registered in the system. Please use a different ${field}.`;
+  // Handle Prisma unique constraint error
+  if (err.code === 'P2002') {
+    const fields = err.meta?.target ? (Array.isArray(err.meta.target) ? err.meta.target.join(', ') : err.meta.target) : 'field';
+    err.message = `The database unique constraint failed on the fields: (${fields}). This record already exists.`;
     err.status = 400;
   }
 

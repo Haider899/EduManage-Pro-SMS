@@ -41,7 +41,7 @@ export const getFullReport = asyncHandler(async (_req: Request, res: Response) =
     prisma.attendance.count({ where: { status: 'late' } })
   ]);
 
-  // Build structured fee stats (mirrors the old Mongoose aggregate shape)
+  // Build structured fee stats
   const feeStats = [
     { _id: 'paid',    totalAmount: Number(paidFees._sum.amount    ?? 0), count: paidFees._count    },
     { _id: 'pending', totalAmount: Number(pendingFees._sum.amount  ?? 0), count: pendingFees._count  },

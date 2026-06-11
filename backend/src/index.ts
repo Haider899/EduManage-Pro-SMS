@@ -1,7 +1,7 @@
 import express from 'express';
 import cors, { CorsOptions } from 'cors';
 import prisma from './db.js';
-import bcrypt from 'bcryptjs'; // Password hashing ke liye (Mongoose model se yahan shift kiya)
+import bcrypt from 'bcryptjs'; // Password hashing utility
 import { config } from './utils/config';
 import { errorHandler } from './middleware/errorMiddleware';
 import studentRoutes from './routes/studentRoutes';
@@ -19,8 +19,7 @@ import materialRoutes from './routes/materialRoutes';
 import leaveRoutes from './routes/leaveRoutes';
 import aiRoutes from './routes/aiRoutes';
 
-// MONGODB_URI ka check bypass karne ke liye temporary validateEnv ko comment kiya 
-// (Agar aapne utils/config se bhi checks hata diye hain toh active rakh sakte hain)
+// Environment validation
 // validateEnv();
 
 const app = express();
