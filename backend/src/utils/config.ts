@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// MONGODB_URI ko mita kar DATABASE_URL add kar diya
+// MONGODB_URI ko change kar DATABASE_URL use kiya gaya hai is app me 
 const requiredEnvVars = [
   'DATABASE_URL',
   'JWT_SECRET',

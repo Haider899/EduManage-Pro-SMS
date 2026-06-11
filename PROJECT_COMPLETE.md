@@ -1,8 +1,8 @@
 # ✅ Project Complete!
 
-## 🎉 School Management System - Professional Edition
+## 🎉 Educational Management System - Professional Edition
 
-Your professional, modern School Management System has been successfully created with all features, attractive UI/UX, 3D effects, and animations!
+Your professional, modern Educational Management System has been successfully created with all features, attractive UI/UX, 3D effects, and animations!
 
 ---
 
@@ -65,7 +65,7 @@ SMS/
 ### Technical Features
 - 🔐 Authentication ready (JWT setup)
 - 📡 RESTful API architecture
-- 💾 MongoDB database with schemas
+- 💾 Supabasedatabase with schemas
 - 🐳 Docker containerization
 - 📱 Mobile-responsive
 - ⚡ Performance optimized

@@ -44,7 +44,7 @@ router.post("/chat", protect, async (req: AuthRequest, res: Response) => {
         {
           role: "system",
           content:
-            "You are an EduManage Pro assistant — a helpful AI for school/college administrators, teachers, and students. Answer concisely and professionally.",
+            "You are an NexduManage Pro assistant — a helpful AI for school/college administrators, teachers, and students. Answer concisely and professionally.",
         },
         { role: "user", content: message },
       ],

@@ -169,7 +169,7 @@ const startServer = async () => {
   try {
     await connectDB();
     app.listen(config.port, () => {
-      console.log(`\nSchool Management System Server`);
+      console.log(`\nEducational Management System Server`);
       console.log(`Running on http://localhost:${config.port}`);
       console.log(`Environment: ${config.nodeEnv}\n`);
     });

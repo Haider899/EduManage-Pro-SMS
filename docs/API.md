@@ -73,21 +73,21 @@ GET /students
     {
       "_id": "507f1f77bcf86cd799439011",
       "rollNumber": "STU001",
-      "firstName": "John",
-      "lastName": "Doe",
-      "email": "john@example.com",
+      "firstName": "Haider",
+      "lastName": "Usama",
+      "email": "[EMAIL_ADDRESS]",
       "phone": "1234567890",
       "dateOfBirth": "2008-05-15",
       "gender": "male",
       "class": "507f1f77bcf86cd799439012",
       "section": "A",
       "address": "123 Main St",
-      "city": "New York",
-      "state": "NY",
-      "pinCode": "10001",
-      "parentName": "Jane Doe",
-      "parentPhone": "0987654321",
-      "parentEmail": "jane@example.com",
+      "city": "Islamabad",
+      "state": "Islamabad",
+      "pinCode": "50001",
+      "parentName": "Usama Haider",
+      "parentPhone": "+923xxxxxxxxx (Father/Mother/Guardian Phone Number)",
+      "parentEmail": "[EMAIL_ADDRESS] (Father/Mother/Guardian Email Address)",
       "admissionDate": "2023-06-01",
       "photo": "https://example.com/photo.jpg",
       "status": "active",
@@ -103,11 +103,11 @@ GET /students
 
 ### Get Student by ID
 ```
-GET /students/:id
+GET /students/:supabase_id
 ```
 
 **URL Parameters**:
-- `id`: Student MongoDB ID
+- `supabase_id`: Student supabase_id
 
 **Response**: Returns single student object
 
@@ -120,21 +120,21 @@ POST /students
 ```json
 {
   "rollNumber": "STU001",
-  "firstName": "John",
-  "lastName": "Doe",
-  "email": "john@example.com",
+  "firstName": "Haider",
+  "lastName": "Usama",
+  "email": "[EMAIL_ADDRESS]",
   "phone": "1234567890",
   "dateOfBirth": "2008-05-15",
   "gender": "male",
   "class": "507f1f77bcf86cd799439012",
   "section": "A",
   "address": "123 Main St",
-  "city": "New York",
-  "state": "NY",
-  "pinCode": "10001",
-  "parentName": "Jane Doe",
-  "parentPhone": "0987654321",
-  "parentEmail": "jane@example.com"
+  "city": "Islamabad",
+  "state": "Islamabad",
+  "pinCode": "50001",
+  "parentName": "Usama Haider",
+  "parentPhone": "+923xxxxxxxxx",
+  "parentEmail": "[EMAIL_ADDRESS]"
 }
 ```
 
@@ -149,11 +149,11 @@ POST /students
 
 ### Update Student
 ```
-PUT /students/:id
+PUT /students/:supabase_id
 ```
 
 **URL Parameters**:
-- `id`: Student MongoDB ID
+- `supabase_id`: Student supabase_id
 
 **Request Body**: Same as create (partial update allowed)
 
@@ -161,11 +161,11 @@ PUT /students/:id
 
 ### Delete Student
 ```
-DELETE /students/:id
+DELETE /students/:supabase_id
 ```
 
 **URL Parameters**:
-- `id`: Student MongoDB ID
+- `supabase_id`: Student supabase_id
 
 **Response**:
 ```json
@@ -209,18 +209,18 @@ POST /teachers
   "employeeId": "EMP001",
   "firstName": "Robert",
   "lastName": "Wilson",
-  "email": "robert@example.com",
+  "email": "[EMAIL_ADDRESS]",
   "phone": "1234567890",
   "dateOfBirth": "1990-03-20",
   "gender": "male",
-  "qualification": "B.Tech Computer Science",
+  "qualification": "M.Sc/BS Computer Science",
   "experience": 10,
   "specialization": ["Mathematics", "Science"],
-  "address": "123 Main St",
-  "city": "New York",
-  "state": "NY",
-  "pinCode": "10001",
-  "salary": 50000
+  "address": "H no #123 Main St",
+  "city": "Islamabad",
+  "state": "Islamabad",
+  "pinCode": "44000",
+  "salary": "800000 PKR"
 }
 ```
 
@@ -340,16 +340,17 @@ curl -X POST http://localhost:5000/api/students \
   -H "Authorization: Bearer your_token_here" \
   -d '{
     "rollNumber": "STU001",
-    "firstName": "John",
-    "lastName": "Doe",
-    "email": "john@example.com",
-    "phone": "1234567890",
+    "firstName": "Haider",
+    "lastName": "Usama",
+    "email": "[EMAIL_ADDRESS]",
+    "phone": "03000000000",
     "dateOfBirth": "2008-05-15",
     "gender": "male",
     "class": "507f1f77bcf86cd799439012",
     "section": "A",
-    "parentName": "Jane Doe",
-    "parentPhone": "0987654321"
+    "parentName": "Usama Haider",
+    "parentPhone": "03000000000",
+    "parentEmail": "[EMAIL_ADDRESS]"
   }'
 ```
 
@@ -376,16 +377,17 @@ const createResponse = await fetch('http://localhost:5000/api/students', {
   },
   body: JSON.stringify({
     rollNumber: 'STU001',
-    firstName: 'John',
-    lastName: 'Doe',
-    email: 'john@example.com',
-    phone: '1234567890',
+    firstName: 'Haider',
+    lastName: 'Usama',
+    email: '[EMAIL_ADDRESS]',
+    phone: '03000000000',
     dateOfBirth: '2008-05-15',
     gender: 'male',
     class: '507f1f77bcf86cd799439012',
     section: 'A',
-    parentName: 'Jane Doe',
-    parentPhone: '0987654321'
+    parentName: 'Usama Haider',
+    parentPhone: '03000000000',
+    parentEmail: '[EMAIL_ADDRESS]'
   })
 });
 
@@ -396,7 +398,7 @@ console.log(createdStudent);
 ### Using Axios (Frontend)
 
 ```javascript
-import api from '@/lib/api';
+
 
 // Get all students
 const students = await api.get('/students');

@@ -79,11 +79,11 @@ The School Management System is built using a modern, scalable architecture with
 │  └──────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────┘
                             │
-                            ▼ MongoDB Protocol
+                            ▼ Supabase Protocol
 ┌─────────────────────────────────────────────────────────────┐
-│                Database (MongoDB)                            │
+│                Database (Supabase)                            │
 │  ┌──────────────────────────────────────────────────────┐   │
-│  │  Collections                                         │   │
+│  │  Collections/Tables                                  │   │
 │  │  - students (Student Records)                        │   │
 │  │  - teachers (Staff Information)                      │   │
 │  │  - classes (Class Structure)                         │   │
@@ -146,15 +146,12 @@ The School Management System is built using a modern, scalable architecture with
 - CORS configuration
 
 ### Layer 4: Models
-- MongoDB schema definitions
-- Data validation rules
-- Database indexes
+- supabase schema definitions
 - Relationships
 
 ### Layer 5: Database
-- MongoDB collections
-- Document structure
-- Query optimization
+- supabase tables
+- table structure
 
 ## Data Flow
 

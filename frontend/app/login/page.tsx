@@ -187,7 +187,7 @@ const LoginPage = () => {
             {/* Register Link */}
             <div className="text-center pt-2">
               <p className="text-slate-600 dark:text-slate-400 text-sm">
-                Don't have an account?{' '}
+                Don&apos;t have an account?{' '}
                 <button 
                   type="button"
                   onClick={() => router.push('/register')}
